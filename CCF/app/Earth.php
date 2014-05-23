@@ -6,14 +6,14 @@
  *
  * This is your default application object.
  */
-class App extends CCApp 
+class Earth extends CCApp 
 {	
 	/**
 	 * The application name
 	 *
 	 * @var string
 	 */
-	public static $name = 'My Application';
+	public static $name = 'Earth CMS';
 	
 	/**
 	 * App configuration

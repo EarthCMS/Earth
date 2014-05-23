@@ -13,36 +13,7 @@
  * @version		2.0
  * @copyright 	2010 - 2014 ClanCats GmbH
  *
- * ###
- *
- *---------------------------------------------------------------
- * Application root 
- *---------------------------------------------------------------
- * 
- * The application root or CCROOT defines the absoulte path to 
- * the framework.
  */
-define( 'CCROOT', __DIR__.'/' );
-
-/*
- *---------------------------------------------------------------
- * file extension 
- *---------------------------------------------------------------
- * 
- * This defines the global used file extention of the php files.
- */
-define( 'EXT', '.php' );
-
-/*
- *---------------------------------------------------------------
- * get the boot paths
- *---------------------------------------------------------------
- * 
- * You can modify that file, its yours. Its especially useful
- * if you have multiple installations on one server and want 
- * to use just one core or one orbit for them all.
- */
-$paths = require CCROOT.'boot/paths'.EXT;
 
 /*
  * define the boot paths to our application with the PATH suffix
@@ -50,28 +21,8 @@ $paths = require CCROOT.'boot/paths'.EXT;
  */
 foreach( $paths as $key => $path )
 {
-    define( strtoupper( $key ).'PATH', $path );
+	define( strtoupper( $key ).'PATH', $path );
 }
-
-/*
- *---------------------------------------------------------------
- * the direcotries
- *---------------------------------------------------------------
- * 
- * Here are the module directories defined. 
- * @ToDo: move them to the classes that use that direcotries. 
- *        that way the you could subclass a class and define 
- *        a custom direcotry.
- */
-$directories = array(
-	'controller'			=> 'controllers/',
-	'language'			=> 'language/',
-	'class'				=> 'classes/',
-	'console'			=> 'console/',
-	'config'				=> 'config/',
-	'view'				=> 'views/',
-	'test'				=> 'tests/',
-);
 
 /*
  * define the module direcotries with the CCDIR prefix
@@ -249,7 +200,7 @@ unset( $paths, $directories );
  */
 if ( !isset( $environment ) )
 {
-    $environment = ClanCats::environment_detector( require CCROOT.'boot/environment'.EXT );
+	$environment = ClanCats::environment_detector( require CCROOT.'boot/environment'.EXT );
 }
 
 /*
@@ -276,7 +227,7 @@ CCProfiler::check( "CCF - Boot completed." );
  */
 if ( !ClanCats::is_cli() && ClanCats::$config->output_buffering ) 
 {
-    ob_start();
+	ob_start();
 }
 
 /*
@@ -289,10 +240,10 @@ if ( !ClanCats::is_cli() && ClanCats::$config->output_buffering )
  */
 if ( ClanCats::$config->timezone ) 
 {
-    if ( !date_default_timezone_set( ClanCats::$config->timezone ) ) 
-    {
-        throw new CCException( "CCF - The given timezone is invalid. check main config -> timezone." );
-    }
+	if ( !date_default_timezone_set( ClanCats::$config->timezone ) ) 
+	{
+		throw new CCException( "CCF - The given timezone is invalid. check main config -> timezone." );
+	}
 }
 
 /*
@@ -304,9 +255,9 @@ if ( ClanCats::$config->timezone )
  */
 if ( ClanCats::$config->locale ) 
 {
-    if ( !setlocale( LC_ALL, ClanCats::$config->locale ) ) {
-        throw new CCException( "CCF - The given locale is invalid.  check main config -> locale" );
-    }
+	if ( !setlocale( LC_ALL, ClanCats::$config->locale ) ) {
+		throw new CCException( "CCF - The given locale is invalid.  check main config -> locale" );
+	}
 }
 
 /*
@@ -333,15 +284,3 @@ CCOrbit::enter_installed_ships();
 
 // all done
 CCProfiler::check( "CCF - All runtime ships entered the Orbit." );
-
-/*
- *---------------------------------------------------------------
- * wake the application
- *---------------------------------------------------------------
- * 
- * Lets wake the main application.
- */
-ClanCats::wake_app( 'App' );
-
-// at this point the app has completet its own boot
-CCProfiler::check( "CCF - App completed." );

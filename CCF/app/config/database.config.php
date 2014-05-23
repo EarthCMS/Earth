@@ -10,7 +10,7 @@ return array(
 	 */
 	'main' =>  array(
 		// selected database
-		'db'	 => 'db_'.CCStr::clean_url( App::name() ),
+		'db'	 => 'db_earth',
 	
 		// driver
 		'driver' => 'mysql',

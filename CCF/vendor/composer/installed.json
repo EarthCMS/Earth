@@ -94,21 +94,21 @@
         "source": {
             "type": "git",
             "url": "https://github.com/ClanCats/Core.git",
-            "reference": "64a0b93630fc4c5b6f90446dcbbd77ec1cfbe5e5"
+            "reference": "ad762ee7688c5b570a07ba884b577c5f3af5100a"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/ClanCats/Core/zipball/64a0b93630fc4c5b6f90446dcbbd77ec1cfbe5e5",
-            "reference": "64a0b93630fc4c5b6f90446dcbbd77ec1cfbe5e5",
+            "url": "https://api.github.com/repos/ClanCats/Core/zipball/ad762ee7688c5b570a07ba884b577c5f3af5100a",
+            "reference": "ad762ee7688c5b570a07ba884b577c5f3af5100a",
             "shasum": ""
         },
         "require": {
             "composer/installers": "~1.0",
             "php": ">=5.3"
         },
-        "time": "2014-05-23 11:13:20",
+        "time": "2014-05-23 18:03:54",
         "type": "clancatsframework-core",
-        "installation-source": "dist",
+        "installation-source": "source",
         "notification-url": "https://packagist.org/downloads/",
         "license": [
             "MIT"
