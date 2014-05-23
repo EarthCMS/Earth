@@ -1,8 +1,7 @@
 Earth CMS
 =========
 
-[![Build Status](https://travis-ci.org/ClanCats/Framework.svg?branch=master)](https://travis-ci.org/ClanCats/Earth)
-[![License](http://img.shields.io/packagist/l/clancats/earth.svg)](https://github.com/ClanCats/Earth)
+[![Build Status](https://travis-ci.org/ClanCats/Earth.svg?branch=master)](https://travis-ci.org/ClanCats/Earth)
 
 The world doesn't need another CMS, the world needs this CMS.
 
