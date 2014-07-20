@@ -25,6 +25,9 @@ return array(
          * sidebar ( if false full container gets used )
          */
         'js'	=> '',
+        
+        'content_header' => '',
+        'content_topic' => '',
     ), 
     
     /*

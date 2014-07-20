@@ -10,6 +10,7 @@ Admin\Registry::add( 'index', function( $module )
 {
 	$module->title = 'Dashboard';
 	$module->controller = 'Admin::Index';
+	$module->icon = "el-icon-dashboard";
 });
 
 /*
@@ -24,8 +25,9 @@ CCFinder::bundle( 'Earth\\Users', CCFPATH.'earth/bundles/users/' );
 // register the admin module
 Admin\Registry::add( 'users', function( $module ) 
 {
-	$module->title = __('Earth\\Users::module.title');
+	$module->title = __('Earth\\Users::controller/admin.topic');
 	$module->controller = 'Earth\\Users::Admin';
+	$module->icon = "el-icon-user";
 });
 
 

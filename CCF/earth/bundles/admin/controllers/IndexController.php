@@ -19,6 +19,8 @@ class IndexController extends Controller
 	{
 		$this->theme->topic = 'Dashboard';
 		
+		
+		
 		echo "IndexController";
 	}
 	

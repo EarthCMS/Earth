@@ -17,4 +17,17 @@ class Controller extends \CCViewController
 	 * @var string
 	 */
 	protected $_theme = 'Admin';
+	
+	/**
+	 * controller wake
+	 * 
+	 * @return void|CCResponse
+	 */
+	public function wake()
+	{
+		if ( !\Earth::$user->is_su() )
+		{
+			return CCRedirect::to( '@auth.sign_in' );
+		}
+	}
 }

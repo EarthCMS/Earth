@@ -30,7 +30,7 @@
 		<ul class="ccd-icon-nav">
 			
 		<?php foreach( $admin_modules as $module ) : ?>
-			<li><a href="<?php echo $module->link(); ?>">
+			<li class="<?php echo CCUrl::active( $module->link() ) ? 'active' : ''; ?>"><a href="<?php echo $module->link(); ?>">
 				<span class="icon-nav-label"><?php echo $module->title(); ?></span>
 				<?php if ( $module->is_image() ) : ?>
 				<img class="image-icon" alt="<?php echo $module->title(); ?>" src="<?php echo $module->icon(); ?>" />
@@ -49,6 +49,14 @@
 </div>
 
 <div id="ccd-content-container">
+	<div class="content-header content-header-fixed">
+		<div>
+			<?php echo $content_header; ?>
+		</div>
+		<div class="page-topic">
+			<h2><?php echo $content_topic; ?></h2>
+		</div>
+	</div>
 	<?php echo $content; ?>
 </div>
 

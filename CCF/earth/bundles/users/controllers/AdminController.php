@@ -1,6 +1,6 @@
 <?php namespace Earth\Users;
 /**
- * AdminController
+ * User AdminController
  **
  * 
  * @package       Earth
@@ -17,7 +17,9 @@ class AdminController extends \Admin\Controller
 	 */
 	public function wake()
 	{
-		// Do stuff
+		$this->theme->topic = __( ':controller.topic' );
+		
+		parent::wake();
 	}
 	
 	/**
@@ -27,16 +29,8 @@ class AdminController extends \Admin\Controller
 	 */
 	public function action_index()
 	{
+		$this->theme->content_topic = __( ':action.topic' );
+		$this->theme->content_header = \CCView::create( 'Admin::content-search.view' );
 		echo "AdminController";
-	}
-	
-	/**
-	 * controller sleep
-	 * 
-	 * @return void
-	 */
-	public function sleep()
-	{
-		// Do stuff
 	}
 }
