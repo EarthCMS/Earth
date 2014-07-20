@@ -12,13 +12,26 @@
 use Earth;
 
 class Registry
-{
+{	
 	/**
 	 * The registered admin modules
 	 *
 	 * @var array
 	 */ 
 	protected static $modules = array();
+	
+	/**
+	 * Register the inital redirect to index
+	 *
+	 * @return void
+	 */
+	public static function _init()
+	{
+		\CCRouter::on( 'ccadmin', function() 
+		{
+			return \CCRedirect::alias( 'admin.index' );
+		});
+	}
 	
 	/**
 	 * Add a new module to the registry
@@ -51,7 +64,7 @@ class Registry
 				
 				call_user_func_array( $callback, array( &$module ));
 				
-				\CCRouter::on( $prefix.'/'.$uri, $module->controller );
+				\CCRouter::on( $prefix.'/'.$uri, array( 'alias' => 'admin.'.$uri ), $module->controller );
 			}
 		}
 	}
