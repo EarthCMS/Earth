@@ -24,6 +24,9 @@
 
 <div id="ccd-navigation-container">
 	<div class="main-navigation">
+		<a id="ccd-logo" href="<?php echo to('@admin'); ?>">
+			<img alt="ClanCats Earth" src="<?php echo CCAsset::uri( 'img/logo.png', 'theme' ); ?>" />
+		</a>
 		<ul>
 			<li><a href="#"><i class="glyphicon glyphicon-heart"></i></a></li>
 		</ul>
