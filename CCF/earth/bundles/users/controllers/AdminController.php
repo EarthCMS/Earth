@@ -31,6 +31,24 @@ class AdminController extends \Admin\Controller
 	{
 		$this->theme->content_topic = __( ':action.topic' );
 		$this->theme->content_header = \CCView::create( 'Admin::content-search.view' );
-		echo "AdminController";
+		
+		$this->view = $this->theme->view( 'Earth\\Users::table.view' );
+	}
+	
+	/**
+	 * index action
+	 * 
+	 * @return void|CCResponse
+	 */
+	public function action_listsource()
+	{
+		$users = \User::find();
+		
+		foreach( $users as $id => $user )
+		{
+			$users[$id] = $user->as_array();
+		} 
+		
+		return \CCResponse::json( array_values( $users ) );
 	}
 }

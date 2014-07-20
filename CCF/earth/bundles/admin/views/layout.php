@@ -57,7 +57,9 @@
 			<h2><?php echo $content_topic; ?></h2>
 		</div>
 	</div>
-	<?php echo $content; ?>
+	<div class="clearfix">
+		<?php echo $content; ?>
+	</div>
 </div>
 
 
@@ -66,6 +68,17 @@
 <?php echo CCAsset::code( 'js', 'vendor' ); ?>
 <?php echo CCAsset::code( 'js', 'theme' ); ?>
 <?php echo CCAsset::code( 'js' ); ?>
+<script>
+CC.init(
+{
+	lang: '<?php echo CCLang::current(); ?>',
+	
+	// UI
+	ui: {
+		loading_img: '<?php echo CCAsset::uri( 'img/loading.gif', 'theme' ); ?>'	
+	}
+});
+</script>
 <?php echo $js; ?>
 </body>
 

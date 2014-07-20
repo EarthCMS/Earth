@@ -53,7 +53,16 @@ return array(
 
 		// js core
 		'jquery.min.js'					=> 'vendor@lib',
-		'js/bootstrap.min.js'			=> 'theme@core',
+		'js/bootstrap.min.js'			=> 'theme@lib',
 		'js/application.js'				=> 'theme@app',
+		
+		// CCF and plugins
+		'js/CCF.js'						=> 'theme@lib',
+		'js/ui/loading.js'				=> 'theme@lib',
+		
+		// bootstrap table
+		'datatables/js/jquery.dataTables.min.js' => 'vendor@lib',
+		'datatables/js/jquery.bootstrap.dataTables.js' => 'vendor@lib',
+		//'datatables/css/jquery.dataTables.min.css' => 'vendor@style',
 	)
 );
