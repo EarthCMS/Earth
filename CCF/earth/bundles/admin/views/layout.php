@@ -27,8 +27,15 @@
 		<a id="ccd-logo" href="<?php echo to('@admin'); ?>">
 			<img alt="ClanCats Earth" src="<?php echo CCAsset::uri( 'img/logo.png', 'theme' ); ?>" />
 		</a>
-		<ul>
-			<li><a href="#"><i class="glyphicon glyphicon-heart"></i></a></li>
+		<ul class="ccd-icon-nav">
+			<li><a href="#">
+				<span class="icon-nav-label">Herz</span>
+				<i class="icon glyphicon glyphicon-heart"></i>
+			</a></li>
+			<li><a class="active" href="#">
+				<span class="icon-nav-label">Alles Super</span>
+				<i class="icon glyphicon glyphicon-ok"></i>
+			</a></li>
 		</ul>
 	</div>
 	<div class="sub-navigation">
