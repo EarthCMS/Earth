@@ -32,6 +32,9 @@
 		</ul>
 	</div>
 	<div class="sub-navigation">
+		<div class="page-topic">
+			<h1><?php echo $topic; ?></h1>
+		</div>
 	</div>
 </div>
 

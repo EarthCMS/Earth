@@ -17,9 +17,11 @@ body, html {
 	width: 350px;
 
 	.main-navigation {
+		float: left;
 		width: 60px;
 		height: 100%;
 		background-color: lighten( @color-dark, 5% );
+		
 
 		#ccd-logo {
 			background-color: @color-main;
@@ -41,7 +43,17 @@ body, html {
 	}
 
 	.sub-navigation {
-
+		float: left;
+		width: 290px;
+		height: 100%;
+		
+		.page-topic h1 {
+			display: block;
+			background-color: darken( @color-dark, 2% );
+			height: 60px;
+			font-size: 20px;
+			padding-left: 20px;
+		}
 	}
 }
 

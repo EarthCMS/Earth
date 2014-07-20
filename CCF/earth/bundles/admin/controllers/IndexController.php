@@ -27,6 +27,8 @@ class IndexController extends Controller
 	 */
 	public function action_index()
 	{
+		$this->theme->topic = 'Dashboard';
+		
 		echo "IndexController";
 	}
 	
