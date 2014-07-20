@@ -1,14 +1,14 @@
-<?php namespace Earth;
+<?php namespace Admin;
 /**
- * Admin
+ * Module
  **
  * 
- * @package       Earth
- * @author        Mario Döring <mario@clancats.com>
- * @version       1.0.0
+ * @package       ClanCats Earth Admin Panel
+ * @author        
+ * @version       1.0
  * @copyright     2010 - 2014 ClanCats GmbH
  */
-class Admin
+class Module
 {
 	/**
 	 * static class initialisation

@@ -1,0 +1,18 @@
+{
+	"name": "ClanCats Earth Admin Panel",
+	"version": "1.0",
+	"description": "Simple admin interface for CCEarth.",
+	"homepage": "http://clancats.io",
+	"keywords": [
+		"CCF",
+		"ClanCats"
+	],
+	"license": "MIT",
+	"authors": [],
+	
+	"namespace": "Admin",
+	
+	"wake": false,
+	"install": false,
+	"uninstall": false
+}

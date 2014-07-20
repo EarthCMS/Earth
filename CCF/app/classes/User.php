@@ -31,4 +31,14 @@ class User extends Auth\User
 		'created_at'		=> array( 'timestamp' ),
 		'modified_at'	=> array( 'timestamp' ),
 	);
+	
+	/**
+	 * Is this user a super one?
+	 *
+	 * @return bool
+	 */
+	public function is_su()
+	{
+		return true;
+	}
 }

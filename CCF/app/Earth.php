@@ -40,24 +40,24 @@ class Earth extends CCApp
 	public static function wake() 
 	{		
 		/*
-		 * Start the session by adding the current uri
+		 * start the session by adding the current uri
 		 */
 		CCSession::set( 'uri', CCServer::uri() );
 		
 		/**
-		 * Get the user object
+		 * get the user object
 		 */
 		static::$user =& CCAuth::handler()->user;
 		
 		/*
 		 * load the App configuration
 		 */
-		static::$config = CCConfig::create( 'app' );
+		static::$config = CCConfig::create( 'Earth::earth' );
 		
 		/*
-		 * Bind the earth bundle
+		 * load the earth map
 		 */
-		CCFinder::bundle( 'Earth', CCFPATH.'earth/' );
+		require CCFPATH.'earth/bundles/map'.EXT;
 	}
 	
 	/**

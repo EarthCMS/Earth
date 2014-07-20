@@ -1,4 +1,4 @@
-<?php namespace Bootstrap;
+<?php namespace Admin;
 /**
  * Bootstrap Theme
  ** 
