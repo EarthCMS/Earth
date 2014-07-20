@@ -18,7 +18,7 @@ class CCValidator
 	 * @var array[callbacks]
 	 */
 	protected static $rules = array();
-	
+
 	/**
 	 * Add new rule to the validator
 	 *
@@ -30,7 +30,7 @@ class CCValidator
 	{
 		static::$rules[$name] = $callback;
 	}
-	
+
 	/**
 	 * Create a new validator object
 	 *
@@ -41,7 +41,7 @@ class CCValidator
 	{
 		return new static( $data );
 	}
-	
+
 	/**
 	 * Create a new validator from post data
 	 *
@@ -52,28 +52,28 @@ class CCValidator
 	{
 		return new static( array_merge( CCIn::$_instance->POST, $data ) );
 	}
-	
+
 	/**
 	 * Data container
 	 *
 	 * @var array
 	 */
 	private $data = null;
-	
+
 	/**
 	 * The data labels for validation
 	 *
 	 * @var array
 	 */
 	private $labels = array();
-	
+
 	/**
 	 * Failed tests container
 	 *
 	 * @var array
 	 */
 	private $failed = array();
-	
+
 	/**
 	 * Failed tests container
 	 *
@@ -87,7 +87,7 @@ class CCValidator
 	 * @var bool
 	 */
 	private $success = true;
-	
+
 	/**
 	 * Validator constructor
 	 *
@@ -98,7 +98,7 @@ class CCValidator
 	{
 		$this->data = $data;
 	}
-	
+
 	/**
 	 * Did the input pass the validation
 	 *
@@ -108,7 +108,7 @@ class CCValidator
 	{
 		return $this->success;
 	}
-	
+
 	/**
 	 * Did the input not pass the validation
 	 *
@@ -118,7 +118,7 @@ class CCValidator
 	{
 		return !$this->success;
 	}
-	
+
 	/**
 	 * Return the failed tests
 	 *
@@ -128,7 +128,7 @@ class CCValidator
 	{
 		return $this->failed;
 	}
-	
+
 	/**
 	 * Return the error messages
 	 *
@@ -144,17 +144,30 @@ class CCValidator
 			}
 			return array();
 		}
-		
+
 		$errors = array();
-		
+
 		foreach( $this->errors as $error_array )
 		{
 			$errors = array_merge( $errors, $error_array );
 		}
-		
+
 		return $errors;
 	}
-	
+
+	/**
+	 * Add an error to validator
+	 *
+	 * @param string			$key
+	 * @param string			$message
+	 * @return void
+	 */
+	public function add_error( $key, $message )
+	{
+		$this->success = false;
+		$this->errors[$key][] = $message;
+	}
+
 	/**
 	 * Set a data value
 	 *
@@ -166,7 +179,7 @@ class CCValidator
 	{
 		$this->data[$key] = $value;
 	}
-	
+
 	/**
 	 * Set a data value
 	 *
@@ -178,17 +191,17 @@ class CCValidator
 	{
 		if ( !is_null( $value ) && !is_array( $data ) )
 		{
-			$data = array( $key =>$value );
+			$data = array( $data => $value );
 		}
-		
+
 		if ( !is_array( $data ) )
 		{
 			throw new \InvalidArgumentException( 'CCValidator::label - invalid label data given' );
 		}
-		
+
 		$this->labels = array_merge( $this->labels, $data );
 	}
-	
+
 	/** 
 	 * Get the current validator's data
 	 * Wehn the key is not set this will simply return all data
@@ -208,7 +221,7 @@ class CCValidator
 		}
 		return $this->data;
 	}
-	
+
 	/**
 	 * Apply multiple rules to one attribute
 	 *
@@ -218,9 +231,9 @@ class CCValidator
 	public function rules()
 	{
 		$args = func_get_args();
-		
+
 		$key = array_shift( $args );
-		
+
 		if ( !is_array( reset( $args ) ) )
 		{
 			$rules = $args;
@@ -229,32 +242,32 @@ class CCValidator
 		{
 			$rules = array_shift( $args );
 		}
-		
+
 		$success = true;
-		
+
 		foreach( $rules as $rule )
 		{
 			$rule = explode( ':', $rule );
 			$params = array();
-			
+
 			if ( array_key_exists( 1, $rule ) )
 			{
 				$params = explode( ',', $rule[1] );
 			}
-			
+
 			$rule = reset( $rule );
-			
+
 			array_unshift( $params, $key );
-			
+
 			if ( !call_user_func_array( array( $this, $rule ), $params ) )
 			{
 				$success = false;
 			}
 		}
-		
+
 		return $success;
 	}
-	
+
 	/**
 	 * Dynamic function calls 
 	 *
@@ -270,10 +283,10 @@ class CCValidator
 			$key = array_shift( $params );
 			$this->errors[$key][] = $this->generate_error_message( $method, $key, $params );
 		}
-		
+
 		return $result;
 	}
-	
+
 	/**
 	 * Run the validation with a custom message
 	 *
@@ -283,28 +296,28 @@ class CCValidator
 	public function message()
 	{
 		$params = func_get_args();
-		
+
 		$message = array_shift( $params );
 		$method = array_shift( $params );
-		
+
 		if ( !$result = $this->validate( $method, $params ) )
 		{
 			$key = array_shift( $params );
-			
+
 			$params = $this->get_error_message_params( $key, $params );
-			
+
 			// replace the params inside the line
 			foreach ( $params as $param => $value ) 
 			{
 				$message = str_replace( ':'.$param, $value, $message );
 			}
-			
+
 			$this->errors[$key][] = $message;
 		}
-		
+
 		return $result;
 	}
-	
+
 	/**
 	 * Run an validation call
 	 *
@@ -315,27 +328,27 @@ class CCValidator
 	protected function validate( $method, $params )
 	{
 		$reverse = false;
-		
+
 		// when the method starts with not we assume that we 
 		// have to reverse the validation means only accepting the opposite
 		if ( substr( $method, 0, 4 ) === 'not_' )
 		{
 			$reverse = true; $method = substr( $method, 4 );
 		}
-		
+
 		if ( array_key_exists( $method, static::$rules ) )
 		{
 			return $this->apply_rule( $method, static::$rules[$method], $params, $reverse );
 		}
-		
+
 		if ( method_exists( $this, 'rule_'.$method ) )
 		{
 			return $this->apply_rule( $method, array( $this, 'rule_'.$method ), $params, $reverse );
 		}
-		
+
 		throw new \BadMethodCallException( "CCValidator - Invalid rule or method '".$method."'." );
 	}
-	
+
 	/**
 	 * Proof a single result and update the success property
 	 *
@@ -350,15 +363,15 @@ class CCValidator
 		{
 			$this->failed[$key][] = $rule;
 		}
-		
+
 		if ( $this->success === true )
 		{
 			return $this->success = $result;
 		}
-		
+
 		return $result;
 	}
-	
+
 	/**
 	 * Apply an rule executes the rule and runs the result proof
 	 *
@@ -370,29 +383,29 @@ class CCValidator
 	protected function apply_rule( $rule, $callback, $params, $reverse )
 	{
 		$data_key = array_shift( $params );
-		
+
 		// In case of that the requested data set does not exist
 		// we always set the test as failure.
 		if ( !array_key_exists( $data_key, $this->data ) )
 		{
 			return $this->proof_result( $rule, $data_key, ( $reverse ? true : false ) );
 		}
-		
+
 		$call_arguments = array( $data_key, $this->data[$data_key] );
-		
+
 		// add the other params to our call parameters
 		$call_arguments = array_merge( $call_arguments, $params );
-		
+
 		$result = (bool) call_user_func_array( $callback, $call_arguments );
-		
+
 		if ( $reverse )
 		{
 			$result = !$result;
 		}
-		
+
 		return $this->proof_result( $rule, $data_key, $result );
 	}
-	
+
 	/**
 	 * Get the parameter array for the error messages
 	 *
@@ -409,10 +422,10 @@ class CCValidator
 		} else {
 			$field = ucfirst( str_replace( array( '_', '-' ), ' ', $key ) );
 		}
-		
+
 		return array_merge( array( 'field' => $field ), $params );
 	}
-	
+
 	/**
 	 * Generate the error message for an rule
 	 *
@@ -426,11 +439,11 @@ class CCValidator
 		$params = $this->get_error_message_params( $key, $params );
 		return __( ClanCats::$config->get( 'validation.language_prefix' ).'.'.$rule, $params );
 	}
-	
+
 	/*
 	 ** --- RULES BELOW HERE
 	 */
-	
+
 	/** 
 	 * Check if the field is set an not empty
 	 *
@@ -450,7 +463,7 @@ class CCValidator
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Is the given value numeric?
 	 *
@@ -462,7 +475,7 @@ class CCValidator
 	{
 		return is_numeric( $value );
 	}
-	
+
 	/**
 	 * Is the given number at least some size
 	 *
@@ -478,7 +491,7 @@ class CCValidator
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Is the given number max some size
 	 *
@@ -494,7 +507,7 @@ class CCValidator
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Is the given number between min and max
 	 *
@@ -514,7 +527,7 @@ class CCValidator
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Is the given string at least some size
 	 *
@@ -526,7 +539,7 @@ class CCValidator
 	{
 		return $this->rule_min_num( $key, strlen( $value ), $min );
 	}
-	
+
 	/**
 	 * Is the given string max some size
 	 *
@@ -538,7 +551,7 @@ class CCValidator
 	{
 		return $this->rule_max_num( $key, strlen( $value ), $max );
 	}
-	
+
 	/**
 	 * Is the given string between min and max
 	 *
@@ -550,7 +563,7 @@ class CCValidator
 	{
 		return $this->rule_between_num( $key, strlen( $value ), $min, $max );
 	}
-	
+
 	/**
 	 * Is the given value in the given array
 	 *
@@ -563,7 +576,7 @@ class CCValidator
 	{
 		return in_array( $value, $array );
 	}
-	
+
 	/**
 	 * Does the given value match another one
 	 *
@@ -576,7 +589,7 @@ class CCValidator
 	{
 		return $value === $this->data( $other_value );
 	}
-	
+
 	/**
 	 * Is the given value true
 	 *
@@ -588,7 +601,7 @@ class CCValidator
 	{
 		return $value === true;
 	}
-	
+
 	/**
 	 * Is the given value false
 	 *
@@ -600,7 +613,7 @@ class CCValidator
 	{
 		return $value === false;
 	}
-	
+
 	/**
 	 * Is the given value positive
 	 *
@@ -612,7 +625,7 @@ class CCValidator
 	{
 		return ( ( $value ) ? true : false );
 	}
-	
+
 	/**
 	 * Is the given value negative
 	 *
@@ -624,7 +637,7 @@ class CCValidator
 	{
 		return ( ( $value ) ? false : true );
 	}
-	
+
 	/**
 	 * Does the parameter equal the value
 	 *
@@ -637,7 +650,7 @@ class CCValidator
 	{
 		return $value === $other_value;
 	}
-	
+
 	/** 
 	 * Check if the value is a valid email address
 	 *
@@ -649,7 +662,7 @@ class CCValidator
 	{
 		return preg_match( "^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,6})$^", $value );
 	}
-	
+
 	/** 
 	 * Check if the value is a valid ip address
 	 *
@@ -661,7 +674,7 @@ class CCValidator
 	{
 		return filter_var( $value, FILTER_VALIDATE_IP ) !== false;
 	}
-	
+
 	/** 
 	 * Check if the value is a valid ip address
 	 *
@@ -673,7 +686,7 @@ class CCValidator
 	{
 		return filter_var( $value, FILTER_VALIDATE_URL ) !== false;
 	}
-	
+
 	/**
 	 * Check if the regex matches
 	 * 
@@ -686,7 +699,7 @@ class CCValidator
 	{
 		return preg_match( $regex, $value );
 	}
-	
+
 	/**
 	 * Check if valid date format
 	 *
@@ -695,7 +708,7 @@ class CCValidator
 	 * @param string			$format
 	 * @param bool
 	 */
-	public function rule_date_format( $key, $value, $format = 'd-m-Y' ) 
+	public function rule_date_format( $key, $value, $format = 'd/m/Y' ) 
 	{
 		return date( $format, strtotime( trim( $value ) ) ) == trim( $value );
 	}

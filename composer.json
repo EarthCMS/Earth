@@ -1,12 +1,12 @@
 {
-	"name": "clancats/framework",
-	"description": "ClanCats Framework, efficiency, clarity and performence.",
+	"name": "clancats/earth",
+	"description": "Earth is an elegant CMS based on the ClanCatsFramework.",
 	"homepage": "http://www.clancats.com",
 	"keywords": ["ccf", "framework", "clancats"],
 	"license": "MIT",
 	"require": {
 		"php": ">=5.3",
-		"clancats/core": "dev-master"
+		"clancats/core": "2.0.*"
 	},
 	"config": {
 		"vendor-dir": "CCF/vendor"

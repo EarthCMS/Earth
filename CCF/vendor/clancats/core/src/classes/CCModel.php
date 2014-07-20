@@ -27,19 +27,19 @@ class CCModel
 	 * The model defaults
 	 */
 	// protected static $_defaults = array();
-	
+
 	/*
 	 * Fields that should not be returned trough 
 	 * the as_array or as_json function
 	 */
 	// protected static $_hidden = array();
-	
+
 	/*
 	 * Fields that should be returned trough 
 	 * the as_array or as_json function even if they dont exist.
 	 */
 	// protected static $_visible = array();
-	
+
 	/**
 	 * Static init
 	 * 
@@ -51,11 +51,11 @@ class CCModel
 		{
 			return;
 		}
-		
+
 		// lets prepare the settings
 		static::$_static_array[$class] = static::_prepare( static::$_static_array, $class );
 	}
-	
+
 	/**
 	 * Prepare the model
 	 *
@@ -67,7 +67,7 @@ class CCModel
 	{
 		$settings['defaults'] = array();
 		$settings['types'] = array();
-		
+
 		// get the default's, fix them and clean them.
 		if ( property_exists( $class, '_defaults') ) 
 		{
@@ -90,10 +90,10 @@ class CCModel
 					}
 				}
 			}
-			
+
 			static::$_defaults = $settings['defaults'];
 		}
-		
+
 		// add also the hidden fields properties
 		if ( property_exists( $class, '_hidden') ) 
 		{
@@ -103,7 +103,7 @@ class CCModel
 		{
 			$settings['hidden'] = array();
 		}
-		
+
 		// and of course the visible ones
 		if ( property_exists( $class, '_visible') ) 
 		{
@@ -113,7 +113,7 @@ class CCModel
 		{
 			$settings['visible'] = array();
 		}
-		
+
 		// check if the key property isset if not we generate one using
 		// the current class name
 		if ( property_exists( $class, '_name') ) 
@@ -123,14 +123,14 @@ class CCModel
 		else
 		{
 			$settings['name'] = strtolower( str_replace( array( "\\", '_' ), '/', get_called_class() ) );
-			
+
 			// if it starts with model remove it
 			if ( substr( $settings['name'], $length = strlen( 'model/' ) ) == 'model/' )
 			{
 				$settings['name'] = substr( $settings['name'], $length );
 			}
 		}
-		
+
 		return $settings;
 	}
 
@@ -206,13 +206,13 @@ class CCModel
 	{
 		// set the defaults first
 		$this->_data_store = static::_model( 'defaults' );
-		
+
 		if ( !is_null( $data ) )
 		{
 			$this->_assign( $data );
 		}
 	}
-	
+
 	/**
 	 * Get all or a single model setting
 	 *
@@ -223,7 +223,7 @@ class CCModel
 	{
 		return static::_model( $key );
 	}
-	
+
 	/**
 	 * Label translation helper 
 	 *
@@ -233,7 +233,7 @@ class CCModel
 	 */
 	public function __( $key, $params = array() )
 	{
-		return __( 'model/label.'.static::_model( 'name' ), $params );
+		return __( 'model/'.static::_model( 'name' ).'.label.'.$key, $params );
 	}
 
 	/**
@@ -245,7 +245,7 @@ class CCModel
 	public function _assign( $data ) 
 	{
 		$data = $this->_before_assign( $data );
-		
+
 		$types = static::_model( 'types' );
 
 		foreach( $data as $key => $value ) 
@@ -257,14 +257,14 @@ class CCModel
 				{
 					$value = $this->_type_assignment_get( $types[$key], $value );
 				}
-				
+
 				$this->_data_store[$key] = $value;
 			}
 		}
 
 		return $this;
 	}
-	
+
 	/**
 	 * Strict assign only sets some values out of an array.
 	 * This can be useful to easly set some values from post.
@@ -286,7 +286,7 @@ class CCModel
 			}
 		}
 	}
-	
+
 	/**
 	 * Assign the data type in a set operation
 	 *
@@ -303,20 +303,20 @@ class CCModel
 			case 'timestamp':
 				return (int) $value;
 			break;
-			
+
 			case 'bool':
 				return (bool) $value;
 			break;
-			
+
 			// json datatype simply encode
 			case 'json':
 				return json_encode( $value );
 			break;
 		}
-		
+
 		return $value;
 	}
-	
+
 	/**
 	 * Assign the data type in a get operation
 	 *
@@ -333,11 +333,11 @@ class CCModel
 			case 'timestamp':
 				return (int) $value;
 			break;
-			
+
 			case 'bool':
 				return (bool) $value;
 			break;
-			
+
 			// json datatype try to decode return array on failure
 			case 'json':
 				if ( is_array( $value ) )
@@ -351,7 +351,7 @@ class CCModel
 				return array();
 			break;
 		}
-		
+
 		return $value;
 	}
 
@@ -373,7 +373,7 @@ class CCModel
 	public function &__get( $key ) 
 	{
 		$value = null;
-		
+
 		// check if the modifier exists
 		$has_modifier = method_exists( $this, '_get_modifier_'.$key );
 
@@ -386,16 +386,31 @@ class CCModel
 			}
 			else
 			{
-				return $this->{'_get_modifier_'.$key}( $item );
+				return $this->{'_get_modifier_'.$key}( $this->_data_store[$key] );
 			}
 		}
 
 		if ( $has_modifier )
 		{
-			return $this->{'_get_modifier_'.$key}();
+			$modifier_result = $this->{'_get_modifier_'.$key}();
+			return $modifier_result;
 		}
-		
+
+		// when a function extists we forward the call
+		if ( method_exists( $this, $key ) )
+		{
+			return $this->__call_property( $key );
+		}
+
 		throw new \InvalidArgumentException( "CCModel - Invalid or undefined model property '".$key."'." );
+	}
+
+	/**
+	 * Call a function as a property
+	 */
+	public function __call_property( $key )
+	{
+		return call_user_func( array( $this, $key ) );
 	}
 
 	/**
@@ -426,17 +441,40 @@ class CCModel
 	{
 		return ( array_key_exists( $key, $this->_data_store ) || method_exists( $this, '_get_modifier_'.$key ) ) ? true : false;
 	}
-	
+
 	/**
-	 * return the raw data of the object
+	 * return the raw data of the object or a single attribute
 	 *
+	 * @param string 			$key
 	 * @return array
 	 */
-	public function raw() 
+	public function raw( $key = null ) 
 	{
+		if ( !is_null( $key ) )
+		{
+			if ( isset( $this->_data_store[$key] ) )
+			{
+				return $this->_data_store[$key];
+			}
+
+			throw new \InvalidArgumentException( "CCModel - Invalid or undefined model property '".$key."'." );
+		}
+
 		return $this->_data_store;
 	}
-	
+
+	/**
+	 * Set a value to the model without using the modifiers
+	 *
+	 * @param string 		$key
+	 * @param string			$value
+	 * @return void
+	 */
+	public function raw_set( $key, $value )
+	{
+		$this->_data_store[$key] = $value;
+	}
+
 	/**
 	 * Get the object as array
 	 * When $modifiers is true, then the data will be passed trough the modifiers
@@ -447,35 +485,35 @@ class CCModel
 	public function as_array( $modifiers = true )
 	{
 		$settings = static::_model();
-		
+
 		// get the available keys
 		$keys = ( $this->_data_store );
-		
+
 		// remove the hidden ones
 		$keys = array_diff_key( $keys, $settings['hidden'] );
-		
+
 		// add this moment we can simply return when 
 		// we dont wish to execute the modifiers
 		if ( $modifiers === false )
 		{
 			return $keys;
 		}
-		
+
 		// add the visible keys
 		foreach( $settings['visible'] as $key => $value )
 		{
 			$keys[$key] = null;
 		}
-		
+
 		// run the modifiers
 		foreach( $keys as $key => $value )
 		{
 			$keys[$key] = $this->$key;
 		}
-		
+
 		return $keys;
 	}
-	
+
 	/**
 	 * Get the object as json
 	 * When $modifiers is true, then the data will be passed trough the modifiers

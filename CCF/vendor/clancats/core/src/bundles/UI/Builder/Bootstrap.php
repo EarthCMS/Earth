@@ -22,6 +22,17 @@ class Builder_Bootstrap implements Builder_Interface
 	}
 	
 	/**
+	 * Build an input form
+	 *
+	 * @param UI\HTML		$element
+	 * @return UI\HTML
+	 */
+	public function build_form_textarea( $element )
+	{
+		return $element->class( 'form-control' );
+	}
+	
+	/**
 	 * Build an input label
 	 *
 	 * @param UI\HTML		$element
@@ -41,6 +52,17 @@ class Builder_Bootstrap implements Builder_Interface
 	public function build_form_checkbox( $element )
 	{
 		return HTML::tag( 'div', $element->render() )->class( 'checkbox' );
+	}
+	
+	/**
+	 * Build an input label
+	 *
+	 * @param UI\HTML		$element
+	 * @return UI\HTML
+	 */
+	public function build_form_select( $element )
+	{
+		return $element->class( 'form-control' );
 	}
 	
 	/**

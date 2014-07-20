@@ -7,11 +7,13 @@
         "installer",
         "AGL",
         "AnnotateCms",
+        "Bitrix",
         "CakePHP",
         "CodeIgniter",
         "concrete5",
         "Craft",
         "Croogo",
+        "Dolibarr",
         "Drupal",
         "Elgg",
         "FuelPHP",
@@ -26,6 +28,7 @@
         "MediaWiki",
         "OXID",
         "MODULEWork",
+        "Moodle",
         "Piwik",
         "phpBB",
         "PPI",
@@ -62,6 +65,6 @@
     },
     "require-dev": {
         "composer/composer": "1.0.*@dev",
-        "phpunit/phpunit": "3.7.*"
+        "phpunit/phpunit": "4.1.*"
     }
 }

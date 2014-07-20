@@ -47,3 +47,22 @@
 
 // and the shdaow
 \CCFinder::shadow( 'CCAuth', 'Auth', COREPATH.'bundles/Auth/CCAuth'.EXT );
+
+/*
+ *---------------------------------------------------------------
+ * Email Bundle
+ *---------------------------------------------------------------
+ * 
+ * The Email bundle mostly wraps phpmailer
+ */
+// namepace
+\CCFinder::map( 'Mail', COREPATH.'bundles/Mail/' );
+// phpmailer
+\CCFinder::bind( array(
+    "Mail\\PHPMailer\\PHPMailer" => COREPATH.'bundles/Mail/PHPMailer/class.phpmailer'.EXT,
+    "Mail\\PHPMailer\\POP3" => COREPATH.'bundles/Mail/PHPMailer/class.php3'.EXT,
+    "Mail\\PHPMailer\\SMTP" => COREPATH.'bundles/Mail/PHPMailer/class.smtp'.EXT,
+));
+
+// and the shdaow
+\CCFinder::shadow( 'CCMail', 'Mail', COREPATH.'bundles/Mail/CCMail'.EXT );

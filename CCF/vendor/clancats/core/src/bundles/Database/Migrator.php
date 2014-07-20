@@ -30,6 +30,31 @@ class Migrator
 	}
 	
 	/**
+	 * Get a migration path by name
+	 *
+	 * @param string 		$name
+	 * @return string
+	 */
+	public static function path( $name, $time = null )
+	{
+		if ( is_null( $time ) )
+		{
+			$time = time();
+		}
+		
+		$name = explode( '/', $name );
+		
+		foreach( $name as $key => $value )
+		{
+			$name[$key] = \CCStr::clean_url( $value, '_' );
+		}
+		
+		$name = implode( '/', $name );
+		
+		return \CCPath::get( $name.'_'.$time, \ClanCats::directory( 'migration' ), '.sql' );
+	}
+	
+	/**
 	 * Run all new migration
 	 *
 	 * @return void
@@ -134,6 +159,8 @@ class Migrator
 		// update the config
 		static::$config->set( $key.'.revision', key( $others ) );
 		static::$config->write();
+		
+		return true;
 	}
 	
 	/**
@@ -144,12 +171,12 @@ class Migrator
 	public static function available()
 	{
 		$bundles = array_merge( \CCFinder::$bundles, array( 
-			'app' => \CCPath::get( '', null, \ClanCats::directory( 'migration' ) ) 
+			'app' => \CCPath::get( '', null ) 
 		));
 		
 		$available = array();
 		
-		foreach( \CCFinder::$bundles as $name => $path )
+		foreach( $bundles as $name => $path )
 		{
 			$directory = $path.\ClanCats::directory( 'migration' );
 			
@@ -211,20 +238,6 @@ class Migrator
 	}
 	
 	/**
-	 * Create new migration class
-	 * 
-	 * @param string			$name
-	 * @return void
-	 */
-	public static function shipyard( $name )
-	{
-		$file = \CCPath::get( $name, \ClanCats::directory( 'migration' ), EXT );
-		
-		$directory = dirname( $file ).'/';
-		$file = basename( $file );
-	}
-	
-	/**
 	 * The migration sql file
 	 *
 	 * @var string
@@ -259,8 +272,6 @@ class Migrator
 	{
 		return $this->name;
 	}
-	
-	
 	
 	/**
 	 * Migrates the current migration up

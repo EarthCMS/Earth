@@ -189,6 +189,11 @@ class shipyard extends \CCConsoleController
 			
 			$forge = new \CCForge_Php;
 			
+			// add the table property on top
+			echo $forge->property( 'public static $_table', $table, 'Database table' );
+			
+			echo $forge->line(2);
+			
 			// define the internal types
 			$internal_types = array( 'bool', 'int', 'float', 'double', 'string' );
 			
@@ -284,6 +289,11 @@ class shipyard extends \CCConsoleController
 		// params
 		$name = $params[0];
 		$parent = $params[1];
+		
+		if ( isset( $params['view'] ) )
+		{
+			$parent = 'CCViewController';
+		}
 		
 		// get name if we dont have one
 		while( !$name ) 

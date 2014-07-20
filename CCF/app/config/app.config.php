@@ -8,8 +8,4 @@
  */
 return array(
     
-    /*
-     * an description of your application
-     */
-    'description'      => 'ClanCats Framework efficiency, clarity and performance.',
 );

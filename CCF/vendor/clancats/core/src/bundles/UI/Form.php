@@ -38,11 +38,6 @@ class Form
 	public static function _init()
 	{
 		static::$builder_enabled = Builder::$config->get( 'form.builder_enabled' );
-		
-		// we register the internal macros to make them overwritable
-		static::macro( 'input', "\\UI\\Form::make_input" );
-		static::macro( 'label', "\\UI\\Form::make_label" );
-		static::macro( 'checkbox', "\\UI\\Form::make_checkbox" );
 	}
 	
 	/**
@@ -168,16 +163,21 @@ class Form
 	 */
 	public static function __callStatic( $method, $args ) 
 	{
-		if ( !array_key_exists( $method , static::$macros ) )
-		{
-			throw new Exception( "UI\\Form - Unknown macro '".$method."'." );
-		}
-		
 		// take the first argument and add it again as the id
 		array_unshift( $args, static::build_id( $method, reset( $args ) ) );
 		
-		// execute the macro
-		return call_user_func_array( static::$macros[$method], $args );
+		if ( array_key_exists( $method, static::$macros ) )
+		{
+			// execute the macro
+			return call_user_func_array( static::$macros[$method], $args );
+		}
+		
+		if ( method_exists( __CLASS__, 'make_'.$method ) )
+		{
+			return call_user_func_array( array( __CLASS__, 'make_'.$method ), $args );
+		}
+		
+		throw new Exception( "UI\\Form - Unknown macro '".$method."'." );
 	}
 	
 	/**
@@ -201,13 +201,18 @@ class Form
 	 * @param string		$type
 	 * @param array 		$attr
 	 */
-	public static function make_input( $id, $key, $type = 'text', $attr = array() ) 
+	public static function make_input( $id, $key, $value = null, $type = 'text', $attr = array() ) 
 	{
 		$element = HTML::tag( 'input', array_merge( array( 
 			'id' => $id, 
 			'name' => $key, 
 			'type' => $type 
 		), $attr ));
+		
+		if ( !is_null( $value ) )
+		{
+			$element->value( _e( $value ) );
+		}
 		
 		if ( !static::$builder_enabled )
 		{
@@ -253,6 +258,7 @@ class Form
 	 * @param string		$text
 	 * @param bool		$active		Is the checkbox cheked
 	 * @param array 		$attr
+	 * @return string
 	 */
 	public static function make_checkbox( $id, $key, $text = '', $active = false, $attr = array() ) 
 	{
@@ -262,7 +268,7 @@ class Form
 			'type' => 'checkbox' 
 		), $attr ));
 		
-		$element->checked( $active );
+		$element->checked( (bool) $active );
 		
 		$element = HTML::tag( 'label', $element->render().' '.$text );
 		
@@ -275,52 +281,89 @@ class Form
 	}
 	
 	/**
-	 * generate an input
-	 *
-	 * @param string 	$key | This is the name 
-	 * @param string	$type
-	 * @param array 	$attr
-	 */
-	public function _button( $type, $text, $attr = array() ) {
-		return HTML::tag('button', $text, array_merge( array( 'id' => $this->id_prefix.$type.'_button', 'type' => $type ), $attr ) );
-	}
-	
-	
-	
-
-	
-	/**
 	 * generate a textarea
 	 *
-	 * @param string 	$key | This is the name 
-	 * @param string	$value
-	 * @param array 	$attr
+	 * @param string		$id			The id that has been generated for us.
+	 * @param string 	$key			This is the name 
+	 * @param string		$value
+	 * @param array 		$attr
+	 * @return string
 	 */
-	public function _textarea( $key, $value = '', $attr = array() ) {
-		return HTML::tag('textarea', $value, array_merge( array( 'id' => $this->id_prefix.$key, 'name' => $key ), $attr ));
+	public static function make_textarea( $id, $key, $value = '', $attr = array() ) 
+	{
+		$element = HTML::tag( 'textarea', _e( $value ), array_merge( array( 
+			'id' => $id, 
+			'name' => $key,
+		), $attr ));
+		
+		if ( !static::$builder_enabled )
+		{
+			 return $element;
+		}
+		
+		return Builder::handle( 'form_textarea', $element );
 	}
 	
+	/**
+	 * generate a file input
+	 *
+	 * @param string		$id			The id that has been generated for us.
+	 * @param string 	$key			This is the name
+	 * @param array 		$attr
+	 * @return string
+	 */
+	public static function make_file( $id, $key, $attr = array() ) 
+	{
+		return static::make_input( $id, $key, null, 'file', $attr );
+	}
+
 	/**
 	 * generate an select
 	 *
-	 * @param string 	$key | This is the name 
-	 * @param string	$type
-	 * @param array 	$attr
+	 *     Form::select( 'gender', array( 'F', 'M' ), 0 );
+	 *
+	 *     Form::select( 'gender', array( '1' => 'A', '2' => 'B' ), array( 1,2 ), 2 );
+	 *
+	 * @param string		$id			The id that has been generated for us.
+	 * @param string 	$name		This is the name
+	 * @param array		$options
+	 * @param array 		$selected
+	 * @param int		$size
+	 * @return string
 	 */
-	public function _select( $key, $data, $selected = array(), $size = 1, $attr = array() ) {
-		
-		if ( !is_array( $selected ) ) {
+	public static function make_select( $id, $name, array $options, $selected = array(), $size = 1 ) 
+	{	
+		if ( !is_array( $selected ) ) 
+		{
 			$selected = array( $selected );
 		}
 		
-		return HTML::tag( 'select', function() use( $data, $selected ){
-			foreach( $data as $key => $item ) {
-				if ( in_array( $key, $selected ) ) {
-					echo HTML::tag( 'option', $item, array( 'value' => $key, 'selected' => 'selected' ) );
-				} else {
-					echo HTML::tag( 'option', $item, array( 'value' => $key ) );
-				}
+		$buffer = "";
+		
+		foreach( $options as $key => $value )
+		{
+			$option = HTML::tag( 'option', $value )
+				->value( $key );
+			
+			if ( in_array( $key, $selected ) )
+			{
+				$option->selected( true );
 			}
-		}, array_merge( array( 'id' => $this->id_prefix.$key, 'name' => $key, 'size' => $size ), $attr ));
+			
+			$buffer .= $option->render();
+		}
+		
+		$element = HTML::tag( 'select', $buffer, array(
+			'id' => $id,
+			'name' => $name,
+			'size' => $size,
+		) );
+		
+		if ( !static::$builder_enabled )
+		{
+			 return $element;
+		}
+		
+		return Builder::handle( 'form_select', $element );
 	}
 }
