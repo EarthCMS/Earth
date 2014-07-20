@@ -46,6 +46,7 @@ return array(
 		// Main style
 		'less/style.less' 				=> 'theme@style',
 		'less/layout.less' 				=> 'theme@style',
+		'less/elusive-webfont.less' 		=> 'theme@style',
 
 		// js core
 		'jquery.min.js'					=> 'vendor@lib',

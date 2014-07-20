@@ -1,6 +1,6 @@
 <?php namespace Admin;
 /**
- * Module
+ * Admin Exception
  **
  * 
  * @package       ClanCats Earth Admin Panel
@@ -8,14 +8,4 @@
  * @version       1.0
  * @copyright     2010 - 2014 ClanCats GmbH
  */
-class Module
-{
-	/**
-	 * static class initialisation
-	 * @return void
-	 */
-	public static function _init()
-	{
-		// Do stuff
-	}
-}
+class Exception extends \CCException {}

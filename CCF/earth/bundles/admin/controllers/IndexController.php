@@ -9,17 +9,7 @@
  * @copyright     2010 - 2014 ClanCats GmbH
  */
 class IndexController extends Controller
-{
-	/**
-	 * controller wake
-	 * 
-	 * @return void|CCResponse
-	 */
-	public function wake()
-	{
-		// Do stuff
-	}
-	
+{	
 	/**
 	 * index action
 	 * 

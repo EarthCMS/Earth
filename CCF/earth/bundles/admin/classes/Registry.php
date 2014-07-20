@@ -46,6 +46,16 @@ class Registry
 	}
 	
 	/**
+	 * Get the modules
+	 *
+	 * @return array[Module]
+	 */
+	public static function modules()
+	{
+		return static::$modules;	
+	}
+	
+	/**
 	 * Prepare the modules, register the routes etc..
 	 *
 	 * @return void
@@ -60,11 +70,20 @@ class Registry
 		{
 			foreach( static::$modules as $uri => $callback )
 			{
+				if ( $callback instanceof Module )
+				{
+					continue;
+				}
+				
 				$module = new Module;
 				
-				call_user_func_array( $callback, array( &$module ));
+				call_user_func_array( $callback, array( &$module ) );
+				
+				$module->uri = $uri;
 				
 				\CCRouter::on( $prefix.'/'.$uri, array( 'alias' => 'admin.'.$uri ), $module->controller );
+				
+				static::$modules[$uri] = $module;
 			}
 		}
 	}

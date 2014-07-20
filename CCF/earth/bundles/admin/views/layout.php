@@ -28,14 +28,17 @@
 			<img alt="ClanCats Earth" src="<?php echo CCAsset::uri( 'img/logo.png', 'theme' ); ?>" />
 		</a>
 		<ul class="ccd-icon-nav">
-			<li><a href="#">
-				<span class="icon-nav-label">Herz</span>
-				<i class="icon glyphicon glyphicon-heart"></i>
+			
+		<?php foreach( $admin_modules as $module ) : ?>
+			<li><a href="<?php echo $module->link(); ?>">
+				<span class="icon-nav-label"><?php echo $module->title(); ?></span>
+				<?php if ( $module->is_image() ) : ?>
+				<img class="image-icon" alt="<?php echo $module->title(); ?>" src="<?php echo $module->icon(); ?>" />
+				<?php else: ?>
+				<i class="icon <?php echo $module->icon(); ?>"></i>
+				<?php endif; ?>
 			</a></li>
-			<li><a class="active" href="#">
-				<span class="icon-nav-label">Alles Super</span>
-				<i class="icon glyphicon glyphicon-ok"></i>
-			</a></li>
+		<?php endforeach; ?>
 		</ul>
 	</div>
 	<div class="sub-navigation">

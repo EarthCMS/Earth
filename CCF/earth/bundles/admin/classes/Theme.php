@@ -33,4 +33,19 @@ class Theme extends \Packtacular\Theme
 	{
 		return "assets/".__NAMESPACE__.'/';
 	}
+	
+	/**
+	 * Render the view and return the output.
+	 *
+	 * @param string		$file
+	 * @return string
+	 */
+	public function render( $file = null ) 
+	{
+		// assign the moduels
+		$this->admin_modules = Registry::modules();
+		
+		// render the theme
+		return parent::render( $file );
+	}
 }

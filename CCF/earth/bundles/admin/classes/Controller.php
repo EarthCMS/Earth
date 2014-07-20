@@ -16,5 +16,5 @@ class Controller extends \CCViewController
 	 *
 	 * @var string
 	 */
-	protected $_theme = 'Admin';	
+	protected $_theme = 'Admin';
 }
