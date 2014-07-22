@@ -133,14 +133,11 @@ ul.ccd-icon-nav {
 	background-color: @color-background;
 	min-height: 1900px;
 	margin-left: 350px;
+	position: relative;
 	
 	color: @font-color;
 	
 	padding-top: 60px;
-	
-	> div {
-		
-	}
 }
 
 /**
@@ -192,4 +189,20 @@ ul.ccd-icon-nav {
 .form-control.transparent {
 	border: 2px transparent;
 	background: transparent;
+}
+
+/**
+ * Datatables
+ */
+.dataTables_wrapper {
+	.dataTables_processing {
+		display: block;
+		width: 100%;
+		padding: 10px;
+		background-color: #fff;
+		background-image: url('/assets/Admin/img/loading.gif');
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: 32px;
+	}
 }

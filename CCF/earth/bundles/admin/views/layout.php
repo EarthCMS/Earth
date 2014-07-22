@@ -49,12 +49,14 @@
 </div>
 
 <div id="ccd-content-container">
-	<div class="content-header content-header-fixed">
-		<div>
-			<?php echo $content_header; ?>
-		</div>
-		<div class="page-topic">
-			<h2><?php echo $content_topic; ?></h2>
+	<div class="clearfix">
+		<div class="content-header content-header-fixed">
+			<div>
+				<?php echo $content_header; ?>
+			</div>
+			<div class="page-topic">
+				<h2><?php echo $content_topic; ?></h2>
+			</div>
 		</div>
 	</div>
 	<div class="clearfix">

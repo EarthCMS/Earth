@@ -33,6 +33,23 @@ class AdminController extends \Admin\Controller
 		$this->theme->content_header = \CCView::create( 'Admin::content-search.view' );
 		
 		$this->view = $this->theme->view( 'Earth\\Users::table.view' );
+		
+		$this->view->table = $this->admin_table();
+	}
+	
+	/**
+	 * Get the admin table of the users
+	 */
+	public function admin_table()
+	{
+		$table = new \Admin\Table( '\\User' );
+		$table->column( 'id', true, true, function( $id ) 
+		{
+			return '#'.$id;
+		});
+		$table->column( 'email', true, true );
+		
+		return $table;
 	}
 	
 	/**
@@ -41,14 +58,7 @@ class AdminController extends \Admin\Controller
 	 * @return void|CCResponse
 	 */
 	public function action_listsource()
-	{
-		$users = \User::find();
-		
-		foreach( $users as $id => $user )
-		{
-			$users[$id] = $user->as_array();
-		} 
-		
-		return \CCResponse::json( array_values( $users ) );
+	{		
+		return $this->admin_table()->response();
 	}
 }
