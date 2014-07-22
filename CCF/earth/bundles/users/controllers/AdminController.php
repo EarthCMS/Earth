@@ -8,6 +8,9 @@
  * @version       1.0.0
  * @copyright     2010 - 2014 ClanCats GmbH
  */
+ 
+use Carbon\Carbon; 
+
 class AdminController extends \Admin\Controller
 {
 	/**
@@ -48,6 +51,10 @@ class AdminController extends \Admin\Controller
 			return '#'.$id;
 		});
 		$table->column( 'email', true, true );
+		$table->column( 'created_at', true, false, function( $timestamp ) 
+		{
+			return Carbon::createFromTimeStamp( $timestamp )->format( 'd/m/Y H:i' );
+		});
 		
 		return $table;
 	}
@@ -58,7 +65,7 @@ class AdminController extends \Admin\Controller
 	 * @return void|CCResponse
 	 */
 	public function action_listsource()
-	{		
+	{
 		return $this->admin_table()->response();
 	}
 }

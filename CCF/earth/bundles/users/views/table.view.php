@@ -3,11 +3,14 @@
 		<tr>
 			<th>ID</th>
 			<th>Email</th>
+			<th>Member since</th>
 		</tr>
 	</thead>
 </table>
 
 <?php $theme->capture_append( 'js', function() use( $table ) 
 { 
-	echo $table->jsinit( '#example', to('@admin.users/listsource') );
+	$init = $table->jsinit( '#example', to('@admin.users/listsource') );
+	$init->set( 'searchfield', '#content-search-input' );
+	echo $init->render();
 }); ?>

@@ -3,7 +3,7 @@ $(document).ready(function()
 {
 	userstable = $('{{$target}}').dataTable(
 	{
-		"dom": 'rtip',
+		"dom": 'rt<"dataTable_footer"ip>',
 		"processing": true,
 		"serverSide": true,
 		"ajax": "{{$remote}}",
@@ -16,13 +16,18 @@ $(document).ready(function()
 				"searchable": {{$col->searchable( true )}} 
 			}, 
 		{% endeach %} 
-		]
+		],
+		"language": {
+		   "processing": ""
+		}
 
 	});
 	
-	$('#content-search-input').keyup(function()
+	{% if $searchfield %}
+	$('{{$searchfield}}').keyup(function()
 	{
 		  userstable.fnFilter( $(this).val() );
 	});
+	{% endif %}
 });
 </script>
