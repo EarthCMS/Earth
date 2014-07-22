@@ -114,42 +114,34 @@ class Table
 	 */
 	private function filter_query( &$q, $callback )
 	{
-		$param_columns = CCIn::get( 'columns' );
+		$order_params = CCIn::get( 'order' );
 		
 		$search = CCIn::get( 'search' );
 		$search_term = trim( $search['value'] );
 		
-		// columns
+		// searchable
 		foreach( $this->columns as $key => $column )
-		{
-			$name = $column->name();
-			
+		{			
 			// searchable
 			if ( $column->searchable() )
 			{
-				$q->or_where( $name, 'like', '%'.$search_term.'%' );
+				$q->or_where( $column->name(), 'like', '%'.$search_term.'%' );
 			}
 		}
 		
-		/*for ( $i = 0 ; $i < (int) ClanCats::param( 'iSortingCols', 1 ) ; $i++ ) {
-			if ( ClanCats::param( 'bSortable_'.(int) (ClanCats::param('iSortCol_'.$i) ) ) == "true" ) {
-				$q->order_by(
-					'`'.$columns[ (int)( ClanCats::param( 'iSortCol_'.$i ) ) ].'`', 
-					( ClanCats::param('sSortDir_'.$i) === 'asc' ? 'asc' : 'desc' )
-				);
-			}
-		}
-		
-		// filtering
-		if ( ClanCats::param('sSearch', '') != '' ) {
-			for ( $i = 0 ; $i < count( $columns ); $i++ ) {
-				if ( $i == 0 ) {
-					$q->s_where( '`'.$columns[$i].'`', 'like', '%'.ClanCats::param('sSearch').'%' );
-				} else {
-					$q->s_or_where( '`'.$columns[$i].'`', 'like', '%'.ClanCats::param('sSearch').'%' );
+		// sortable
+		foreach( $order_params as $order )
+		{
+			if ( isset( $this->columns[$order['column']] ) )
+			{
+				$column = $this->columns[$order['column']];
+				
+				if ( $column->sortable() )
+				{
+					$q->order_by( $column->name(), $order['dir'] === 'asc' ? 'asc' : 'desc' );
 				}
 			}
-		}*/
+		}
 		
 		if ( !is_null( $callback ) ) 
 		{
