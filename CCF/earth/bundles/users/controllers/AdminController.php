@@ -54,8 +54,9 @@ class AdminController extends \Admin\Controller
 		{
 			return \UI\HTML::img()
 				->src( $model->avatar() )
-				->width( '45px' )
-				->height( '45px' )
+				->class( 'rounded' )
+				->width( '32px' )
+				->height( '32px' )
 				->render();
 		});
 		$table->column( 'email', true, true );

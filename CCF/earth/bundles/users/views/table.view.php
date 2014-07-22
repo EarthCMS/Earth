@@ -2,7 +2,7 @@
 	<thead>
 		<tr>
 			<th>ID</th>
-			<th width="45px">&nbsp;</th>
+			<th width="32px">&nbsp;</th>
 			<th>Email</th>
 			<th>Member since</th>
 		</tr>
