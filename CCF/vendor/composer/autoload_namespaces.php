@@ -6,6 +6,8 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname(dirname($vendorDir));
 
 return array(
+    'Faker\\PHPUnit' => array($vendorDir . '/fzaninotto/faker/test'),
+    'Faker' => array($vendorDir . '/fzaninotto/faker/src'),
     'Composer\\Installers\\' => array($vendorDir . '/composer/installers/src'),
     'Carbon' => array($vendorDir . '/nesbot/carbon/src'),
 );

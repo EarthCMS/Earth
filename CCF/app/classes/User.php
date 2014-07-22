@@ -33,6 +33,34 @@ class User extends Auth\User
 	);
 	
 	/**
+	 * Create a fake user
+	 *
+	 * @param int 		$count
+	 */
+	public static function fake( $count = 1 )
+	{
+		if ( $count > 1 )
+		{
+			for( $i=0;$i<$count;$i++ )
+			{
+				static::fake(); 
+			}
+			
+			return;
+		}
+		
+		$user = new static;
+		$faker = Faker\Factory::create();
+		
+		$user->email = $faker->email;
+		$user->password = "password";
+		
+		$user->save();
+		
+		return $user;
+	}
+	
+	/**
 	 * Is this user a super one?
 	 *
 	 * @return bool
@@ -40,5 +68,16 @@ class User extends Auth\User
 	public function is_su()
 	{
 		return true;
+	}
+	
+	/**
+	 * Return the users avatar
+	 *
+	 * @param $size
+	 * @return string
+	 */
+	public function avatar()
+	{
+		return "http://www.gravatar.com/avatar/" . md5( strtolower( trim( $this->email ) ) ) . "?d=identicon&s=130";
 	}
 }

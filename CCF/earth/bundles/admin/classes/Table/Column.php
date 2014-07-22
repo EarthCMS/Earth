@@ -67,13 +67,14 @@ class Table_Column
 	 * Display the column
 	 *
 	 * @param string 			$value
+	 * @param CCModel 			$model
 	 * @return string
 	 */
-	public function format( $value )
+	public function format( $value, $model )
 	{
 		if ( !is_null( $this->formattor ) )
 		{
-			return call_user_func( $this->formattor, $value );
+			return call_user_func( $this->formattor, $value, $model );
 		}
 		return $value;
 	}

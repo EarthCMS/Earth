@@ -50,6 +50,14 @@ class AdminController extends \Admin\Controller
 		{
 			return '#'.$id;
 		});
+		$table->column( 'avatar', false, false, function( $id, $model ) 
+		{
+			return \UI\HTML::img()
+				->src( $model->avatar() )
+				->width( '45px' )
+				->height( '45px' )
+				->render();
+		});
 		$table->column( 'email', true, true );
 		$table->column( 'created_at', true, false, function( $timestamp ) 
 		{

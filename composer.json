@@ -6,7 +6,8 @@
 	"license": "MIT",
 	"require": {
 		"php": ">=5.3",
-		"clancats/core": "2.0.*"
+		"clancats/core": "2.0.*",
+		"fzaninotto/faker": "1.5.*@dev"
 	},
 	"config": {
 		"vendor-dir": "CCF/vendor"
