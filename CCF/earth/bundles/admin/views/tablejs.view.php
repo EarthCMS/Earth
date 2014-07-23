@@ -7,6 +7,7 @@ $(document).ready(function()
 		"processing": true,
 		"serverSide": true,
 		"ajax": "{{$remote}}",
+		"pageLength": 25,
 		"columns": 
 		[
 		{% each $columns as $col %} 

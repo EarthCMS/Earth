@@ -21,8 +21,56 @@ class shipyard extends \CCConsoleController
 			'name'	=> 'Shipyard',
 			'desc'	=> 'The shipyard is an helper that generates classes, configuration files, ships and other stuff for you.',
 			'actions'	=> array(
-				'class'	=> "class <class>\n   class <namespace>::<class>",
-				'ship'	=> 'create <ship name> <namespace>',
+				
+				// class action
+				'class'	=> array(
+					'usage' => 'shipyard::class <classname>',
+					'argumnets' => array(
+						'classname' => 'The name of the class ( CCPath )'
+					),
+					'options' => array(
+						'-extends' => 'The superclass that should be extended.',
+						'-implements' => 'The interfaces that should be implemented.',
+						'-no-init' => 'Don\'t generate the static init method.',
+					),
+				),
+				
+				// class action
+				'model'	=> array(
+					'usage' => 'shipyard::model <name> <db table>',
+					'argumnets' => array(
+						'name' => 'The name of the class ( CCPath )',
+						'table' => 'The database table',
+					),
+					'options' => array(
+						'-timestamps' => 'Does this model implement automatic time- stamps?',
+					),
+				),
+				
+				// controller action
+				'controller' => array(
+					'usage' => 'shipyard::controller <controllername>',
+					'argumnets' => array(
+						'controllername' => 'The name of the controller ( CCPath )'
+					),
+					'options' => array(
+						'-view' => 'Is this a view controller?',
+						'-actions' => 'The available actions in this controller.',
+						'-no-events' => 'Don\'t generate the wake and sleep function.',
+					),
+				),
+				
+				// controller action
+				'ship' => array(
+					'usage' => 'shipyard::ship <name> <namespace>',
+					'argumnets' => array(
+						'name' => 'The name of the ship',
+						'namespace' => 'The namespace the ship is going to operate from.',
+					),
+					'options' => array(
+						'-no-namespace' => 'Create the ship without an own namespace.',
+					),
+				),
 			),
 		);
 	}
@@ -39,78 +87,42 @@ class shipyard extends \CCConsoleController
 	 */
 	public function action_class( $params ) 
 	{	
-		// params
-		$name = $params[0];
+		$options = \CCDataObject::assign( $params );
+		
+		$name = $options->get( 0, null );
 		
 		// get name if we dont have one
 		while( !$name ) 
 		{
-			$name = CCCli::read( 'Please enter the class name: ' );
+			$name = $this->read( 'Please enter the class name: ' );
 		}
 		
-		$namespace 	= null;
-		$class 		= $name;
-		$author 		= \CCConfig::create( 'shipyard' )->get( 'defaults.authors' );
-		$package		= \CCConfig::create( 'shipyard' )->get( 'defaults.package' );
-		$copyright	= \CCConfig::create( 'shipyard' )->get( 'defaults.copyright' );
-		$version		= \CCConfig::create( 'shipyard' )->get( 'defaults.version' );
-		
-		// get namespace from the param
-		if ( strpos( $name, '::' ) !== false )
-		{
-			$namespace = explode( '::', $name ); $class = $namespace[1]; $namespace = $namespace[0];
-			
-			// try to get the ship from namespace
-			if ( $ship = \CCOrbit::ship_by_namespace( $namespace ) )
-			{
-				$package = $ship->name;
-				$version = $ship->version;
-				$author = $ship->authors;
-			}
-		}
-		
-		// resolve the path
+		// try to resolve the path
 		if ( !$path = \CCPath::classes( str_replace( '_', '/', $name ), EXT ) )
 		{
-			CCCli::line( 'Could not resolve the path. Check if the namespace is registered.', 'red' ); return;
+			$this->error( 'Could not resolve the path. Check if the namespace is registered.' ); return;
 		}
 		
-		// create forge instance
-		$forge = new \CCForge_Php( $namespace );
+		// create the class
+		$class = \CCShipyard::create( 'class', $name, $options->get( 'extends', null ), explode( ',', $options->get( 'implements', null ) ) );
 		
-		
-		// add header
-		$forge->comment( $this->make_comment_header( $class, array(
-			'package'	=> $package,
-			'authors'	=> $author,
-			'version'	=> $version,
-			'copyright'	=> $copyright
-		)));
-		
-		
-		// add class
-		$forge->closure( 'class '.$class, function() 
-		{	
-			$forge = new \CCForge_Php;
-			
-			// add init function
-			echo $forge->closure( 'public static function _init()', '// Do stuff', 
-				"static class initialisation\n".
-				"@return void"
-			);	
-		});
-		
-		// check before
+		// add static init
+		if ( !$options->get( 'no-init', false ) )
+		{
+			$class->add( 'function', '_init', 'public static', '//', "static class initialisation\n@return void" );
+		}
+				
+		// check for overwrite
 		if ( file_exists( $path ) )
 		{
-			if ( !CCCli::confirm( "The class already exists. Do you wish to overwrite it?", true ) ) 
+			if ( !$this->confirm( "The class already exists. Do you wish to overwrite it?", true ) ) 
 			{
 				return;
 			}
 		}
 		
 		// write file
-		\CCFile::write( $path, $forge );
+		\CCFile::write( $path, $class->output() );
 	}
 	
 	/**
@@ -126,139 +138,35 @@ class shipyard extends \CCConsoleController
 	 */
 	public function action_model( $params ) 
 	{	
+		$options = \CCDataObject::assign( $params );
+		
 		// params
-		$name = $params[0];
-		$table = $params[1];
-		$handler = $params['handler'];
+		$name = $options->get( 0, null );
+		$table = $options->get( 1, null );
 		
 		// get name if we dont have one
 		while( !$name ) 
 		{
-			$name = CCCli::read( 'Please enter the class name: ' );
+			$name = $this->read( 'Please enter the class name: ' );
 		}
 		
 		// get table if we dont have one
 		while( !$table ) 
 		{
-			$table = CCCli::read( 'Please enter the table name: ' );
-		}
-		
-		$namespace 	= null;
-		$class 		= $name;
-		$author 		= \CCConfig::create( 'shipyard' )->get( 'defaults.authors' );
-		$package		= \CCConfig::create( 'shipyard' )->get( 'defaults.package' );
-		$copyright	= \CCConfig::create( 'shipyard' )->get( 'defaults.copyright' );
-		$version		= \CCConfig::create( 'shipyard' )->get( 'defaults.version' );
-		
-		// get namespace from the param
-		if ( strpos( $name, '::' ) !== false )
-		{
-			$namespace = explode( '::', $name ); $class = $namespace[1]; $namespace = $namespace[0];
-			
-			// try to get the ship from namespace
-			if ( $ship = \CCOrbit::ship_by_namespace( $namespace ) )
-			{
-				$package = $ship->name;
-				$version = $ship->version;
-				$author = $ship->authors;
-			}
+			$table = $this->read( 'Please enter the table name: ' );
 		}
 		
 		// resolve the path
 		if ( !$path = \CCPath::classes( str_replace( '_', '/', $name ), EXT ) )
 		{
-			CCCli::line( 'Could not resolve the path. Check if the namespace is registered.', 'red' ); return;
+			$this->error( 'Could not resolve the path. Check if the namespace is registered.' ); return;
 		}
 		
-		// create forge instance
-		$forge = new \CCForge_Php( $namespace );
+		// create the class
+		$model = \CCShipyard::create( 'dbmodel', $name, $table );
 		
-		// add header
-		$forge->comment( $this->make_comment_header( $class, array(
-			'package'	=> $package,
-			'authors'	=> $author,
-			'version'	=> $version,
-			'copyright'	=> $copyright
-		)));
-		
-		// add class
-		$forge->closure( 'class '.$class.' extends \DB\Model', function() use( $table, $class ) 
-		{	
-			$shema = \DB::fetch( "DESCRIBE {$table};", array(), null, 'assoc' );
-			$props = array();
-			
-			$forge = new \CCForge_Php;
-			
-			// add the table property on top
-			echo $forge->property( 'public static $_table', $table, 'Database table' );
-			
-			echo $forge->line(2);
-			
-			// define the internal types
-			$internal_types = array( 'bool', 'int', 'float', 'double', 'string' );
-			
-			$match_types = array(
-				
-				// int
-				'tinyint' => 'int',
-				
-				// string
-				'text' => 'string',
-				'varchar' => 'string',
-			);
-			
-			foreach( $shema as $item ) 
-			{	
-				$default = $item['Default'];
-				$field = $item['Field'];
-				
-				if ( empty( $default ) ) 
-				{	
-					$type = \CCStr::cut( $item['Type'], '(' );
-					
-					if ( array_key_exists( $type, $match_types ) )
-					{
-						$type = $match_types[$type];
-					}
-					elseif ( !in_array( $type, $internal_types ) )
-					{
-						$type = null;
-					}
-					
-					// The primary key should not contain a default value
-					if ( $item['Key'] == 'PRI' ) 
-					{
-						$type = null;
-					}
-					// specialcase tinyint 1 assumed as boolean
-					elseif ( $item['Type'] == 'tinyint(1)' )
-					{
-						$type = 'bool';
-					}
-					
-					if ( $type !== null )
-					{
-						settype( $default, $type );
-					}
-				}
-				
-				$buffer = "\t'$field'";
-				
-				if ( !is_null( $type ) )
-				{
-					$buffer .= " => array( '".$type."'";
-					
-					if ( !is_null( $default ) )
-					{
-						$buffer .= ", ".var_export( $default, true )." )";
-					}
-				}
-				
-				$props[] = $buffer;
-			}
-			
-			echo $forge->property( 'public static $_defaults', "array(\n".implode( ",\n", $props )."\n)", 'The '.$class.' default properties' );
-		});
+		// auto timestamps
+		$model->timestamps( $options->get( 'timestamps', false ) );
 		
 		// check before
 		if ( file_exists( $path ) )
@@ -270,7 +178,7 @@ class shipyard extends \CCConsoleController
 		}
 		
 		// write file
-		\CCFile::write( $path, $forge );
+		\CCFile::write( $path, $model->output() );
 	}
 	
 	/**
@@ -286,112 +194,79 @@ class shipyard extends \CCConsoleController
 	 */
 	public function action_controller( $params ) 
 	{	
-		// params
-		$name = $params[0];
-		$parent = $params[1];
+		$options = \CCDataObject::assign( $params );
 		
-		if ( isset( $params['view'] ) )
-		{
-			$parent = 'CCViewController';
-		}
+		$name = $options->get( 0, null );
+		$parent = $options->get( 1, null );
 		
 		// get name if we dont have one
 		while( !$name ) 
 		{
-			$name = CCCli::read( 'Please enter the controller name: ' );
+			$name = $this->read( 'Please enter the controller name: ' );
 		}
 		
-		// check if there is already controller appended
+		// fix controller suffix
 		if ( substr( $name, ( strlen( 'Controller' ) * -1 ) ) != 'Controller' )
 		{
 			$name .= 'Controller';
 		}
 		
-		// default parent
-		if ( !$parent )
-		{
-			$parent = "\\CCController";
-		}
-		
-		$namespace 	= null;
-		$class 		= $name;
-		$author 		= \CCConfig::create( 'shipyard' )->get( 'defaults.authors' );
-		$package		= \CCConfig::create( 'shipyard' )->get( 'defaults.package' );
-		$copyright	= \CCConfig::create( 'shipyard' )->get( 'defaults.copyright' );
-		$version		= \CCConfig::create( 'shipyard' )->get( 'defaults.version' );
-		
-		// get namespace from the param
-		if ( strpos( $name, '::' ) !== false )
-		{
-			$namespace = explode( '::', $name ); $class = $namespace[1]; $namespace = $namespace[0];
-			
-			// try to get the ship from namespace
-			if ( $ship = \CCOrbit::ship_by_namespace( $namespace ) )
-			{
-				$package = $ship->name;
-				$version = $ship->version;
-				$author = $ship->authors;
-			}
-		}
-		
-		// resolve the path
+		// try to resolve the path
 		if ( !$path = \CCPath::controllers( str_replace( '_', '/', $name ), EXT ) )
 		{
-			CCCli::line( 'Could not resolve the path. Check if the namespace is registered.', 'red' ); return;
+			$this->error( 'Could not resolve the path. Check if the namespace is registered.' ); return;
 		}
 		
-		// create forge instance
-		$forge = new \CCForge_Php( $namespace );
+		// parent
+		if ( is_null( $parent ) )
+		{
+			$parent = '\\CCController';
+		} 
 		
+		// view controller
+		if ( $options->get( 'view', false ) )
+		{
+			$parent = '\\CCViewController';
+		}
 		
-		// add header
-		$forge->comment( $this->make_comment_header( $class, array(
-			'package'	=> $package,
-			'authors'	=> $author,
-			'version'	=> $version,
-			'copyright'	=> $copyright
-		)));
+		// create the class
+		$class = \CCShipyard::create( 'class', $name.'Controller', $parent );
 		
+		// get the actions
+		$actions = array( 'index' );
 		
-		// add class
-		$forge->closure( 'class '.$class.' extends '.$parent, function() use( $class )
-		{	
-			$forge = new \CCForge_Php;
-			
-			// add init function
-			echo $forge->closure( 'public function wake()', '// Do stuff', 
-				"controller wake\n\n".
-				"@return void|CCResponse"
-			);
-			
-			echo $forge->line(2);
-			
-			// add init function
-			echo $forge->closure( 'public function action_index()', 'echo "'.$class.'";', 
-				"index action\n\n".
-				"@return void|CCResponse"
-			);
-			
-			echo $forge->line(2);
-			
-			// add init function
-			echo $forge->closure( 'public function sleep()', '// Do stuff', 
-				"controller sleep\n\n".
-				"@return void"
-			);
-		});
+		if ( $options->get( 'actions', false ) )
+		{
+			$actions = array_merge( $actions, explode( ',', $options->get( 'actions' ) ) );
+		}
 		
-		// check before
+		foreach( $actions as $action )
+		{
+			$action = trim( $action );
+			
+			$class->add( 'function', 'action_'.$action, 'protected', 'echo "'.$name.' '.$action.' action";', ucfirst($action)." action\n@return void|CCResponse" );
+			$class->add( 'line', 2 );
+		}
+		
+		// add static init
+		if ( !$options->get( 'no-events', false ) )
+		{
+			$class->add( 'function', 'wake', 'protected', '//', "Controller wake\n@return void|CCResponse" );
+			$class->add( 'line', 2 );
+			$class->add( 'function', 'sleep', 'protected', '//', "Controller wake\n@return void" );
+		}
+						
+		// check for overwrite
 		if ( file_exists( $path ) )
 		{
-			if ( !CCCli::confirm( "The controller already exists. Do you wish to overwrite it?", true ) ) 
+			if ( !$this->confirm( "The class already exists. Do you wish to overwrite it?", true ) ) 
 			{
 				return;
 			}
 		}
 		
 		// write file
-		\CCFile::write( $path, $forge );
+		\CCFile::write( $path, $class->output() );
 	}
 
 	/**
@@ -407,9 +282,10 @@ class shipyard extends \CCConsoleController
 	 */
 	public function action_ship( $params ) 
 	{	
-		// params
-		$name = $params[0];
-		$namespace = $params[1];
+		$options = \CCDataObject::assign( $params );
+		
+		$name = $options->get( 0, null );
+		$namespace = $options->get( 1, null );
 		
 		// get name if we dont have one
 		while( !$name ) 
@@ -423,26 +299,25 @@ class shipyard extends \CCConsoleController
 			$namespace = $name;
 		}
 		
-		if ( $params['-no-namespace'] ) 
+		// no namespace?
+		if ( $params['no-namespace'] ) 
 		{
 			$namespace = false;
 		}
 		
-		// create blueprint
-		$blueprint = array(
-			'name'			=> $name,
-			'version'		=> \CCConfig::create( 'shipyard' )->get( 'defaults.version' ),
-			'description'	=> \CCConfig::create( 'shipyard' )->get( 'defaults.description' ),
-			'homepage'		=> \CCConfig::create( 'shipyard' )->get( 'defaults.homepage' ),
-			'keywords'		=> \CCConfig::create( 'shipyard' )->get( 'defaults.keywords' ),
-			'license'		=> \CCConfig::create( 'shipyard' )->get( 'defaults.license' ),
-			
-			'authors'		=> \CCConfig::create( 'shipyard' )->get( 'defaults.authors' ),
-						
-			'namespace'		=> $namespace,
-		);
+		// custom target
+		$target = $options->get( 'target', ORBITPATH );
 		
-		$target = ORBITPATH.$name.'/';
+		if ( substr( $target, 0, 1 ) !== '/' )
+		{
+			$target = CCFPATH.$target;
+		}
+		if ( substr( $target, -1 ) !== '/' )
+		{
+			$target .= '/';
+		}
+		
+		$target .= $name.'/';
 		
 		// check if the module is in our orbit path
 		if ( is_dir( $target ) ) 
@@ -453,8 +328,25 @@ class shipyard extends \CCConsoleController
 			}
 		}
 		
+		// create the blueprint
+		$defaults = \CCConfig::create( 'shipyard' );
+		
+		$blueprint = array(
+			'name'			=> $name,
+			'version'		=> $defaults->get( 'defaults.version' ),
+			'description'	=> $defaults->get( 'defaults.description' ),
+			'homepage'		=> $defaults->get( 'defaults.homepage' ),
+			'keywords'		=> $defaults->get( 'defaults.keywords' ),
+			'license'		=> $defaults->get( 'defaults.license' ),
+			
+			'authors'		=> $defaults->get( 'defaults.authors' ),
+						
+			'namespace'		=> $namespace,
+		);
+		
 		// create file
 		\CCJson::write( $target.'blueprint.json', $blueprint, true );
+		
 		
 		$ship = \CCOrbit_Ship::blueprint( $blueprint, $target );
 		

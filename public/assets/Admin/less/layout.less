@@ -192,9 +192,78 @@ ul.ccd-icon-nav {
 }
 
 /**
+ * CCD style tables
+ */
+table.table-ccd {
+	color: #969DAC;
+	
+	tr th {
+		&:focus {
+			outline: none;
+		}
+		&.sorting {
+			cursor: pointer;
+		}
+	}
+	
+	tr th.sorting_asc {
+		
+		background-color: darken( #F5F5F5, 5% );
+	
+		&:after {
+			content: "\00a0\e6f9";
+			font-family: 'Elusive-Icons';
+			speak: none;
+			font-style: normal;
+			font-weight: normal;
+			font-variant: normal;
+			text-transform: none;
+			line-height: 1;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+		}
+	}
+	tr th.sorting_desc {
+	
+		background-color: darken( #F5F5F5, 5% );
+	
+		&:after {
+			content: "\00a0\e6f6";
+			font-family: 'Elusive-Icons';
+			speak: none;
+			font-style: normal;
+			font-weight: normal;
+			font-variant: normal;
+			text-transform: none;
+			line-height: 1;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+		}
+	}
+	
+	>thead>tr>th, >tbody>tr>th, >tfoot>tr>th, >thead>tr>td,
+	>tbody>tr>td, >tfoot>tr>td {
+		border-bottom: 1px solid #F2F2F4;
+		vertical-align: middle;
+	}
+	
+	tr.odd {
+		background-color: #fff;
+	}
+	
+	tr.even {
+		background-color: #FCFCFC;
+	}
+	
+	
+}
+
+
+/**
  * Datatables
  */
 .dataTables_wrapper {
+
 	.dataTables_processing {
 		display: block;
 		position: absolute;

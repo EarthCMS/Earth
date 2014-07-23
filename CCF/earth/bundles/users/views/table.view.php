@@ -1,9 +1,10 @@
-<table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+<table id="example" class="table table-ccd" cellspacing="0" width="100%">
 	<thead>
 		<tr>
-			<th>ID</th>
+			<th width="10px">ID</th>
 			<th width="32px">&nbsp;</th>
 			<th>Email</th>
+			<th>Group</th>
 			<th>Member since</th>
 		</tr>
 	</thead>

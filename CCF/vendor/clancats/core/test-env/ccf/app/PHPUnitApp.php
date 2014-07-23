@@ -14,4 +14,16 @@ class PHPUnitApp extends CCApp
 	 * @var string
 	 */
 	public static $name = 'Core PHPUnit App';
+	
+	/**
+	 * reset and run the migrations
+	 */
+	public static function wake() 
+	{
+		CCFile::delete( APPPATH.'config/migrator.json' );
+		
+		DB::connect();
+		while( \DB\Migrator::rollback() );
+		\DB\Migrator::migrate();
+	}
 }

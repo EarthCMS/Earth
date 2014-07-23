@@ -48,7 +48,7 @@ class AdminController extends \Admin\Controller
 		$table = new \Admin\Table( '\\User' );
 		$table->column( 'id', true, true, function( $id ) 
 		{
-			return '#'.$id;
+			return '<span class="label label-default">#'.$id.'</span>';
 		});
 		$table->column( 'avatar', false, false, function( $id, $model ) 
 		{
@@ -60,6 +60,10 @@ class AdminController extends \Admin\Controller
 				->render();
 		});
 		$table->column( 'email', true, true );
+		$table->column( 'group', false, false, function( $group, $model ) 
+		{
+			return $group->name;
+		});
 		$table->column( 'created_at', true, false, function( $timestamp ) 
 		{
 			return Carbon::createFromTimeStamp( $timestamp )->format( 'd/m/Y H:i' );
@@ -75,6 +79,6 @@ class AdminController extends \Admin\Controller
 	 */
 	public function action_listsource()
 	{
-		return $this->admin_table()->response();
+		return $this->admin_table()->response( null, array( 'group' ) );
 	}
 }
