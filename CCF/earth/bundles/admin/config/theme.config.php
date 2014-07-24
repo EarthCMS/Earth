@@ -59,6 +59,7 @@ return array(
 		// CCF and plugins
 		'js/CCF.js'						=> 'theme@lib',
 		'js/ui/loading.js'				=> 'theme@lib',
+		'js/ui/panel.js'					=> 'theme@lib',
 		
 		// bootstrap table
 		'datatables/js/jquery.dataTables.min.js' => 'vendor@lib',

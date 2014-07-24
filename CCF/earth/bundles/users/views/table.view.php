@@ -6,6 +6,7 @@
 			<th>Email</th>
 			<th>Group</th>
 			<th>Member since</th>
+			<th width="10px">&nbsp;</th>
 		</tr>
 	</thead>
 </table>

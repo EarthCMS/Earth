@@ -68,6 +68,13 @@ class AdminController extends \Admin\Controller
 		{
 			return Carbon::createFromTimeStamp( $timestamp )->format( 'd/m/Y H:i' );
 		});
+		$table->column( 'actions', false, false, function( $id, $model ) 
+		{
+			return \UI\HTML::a( '<i class="el-icon-file-edit"></i>' )
+				->class( 'btn btn-dark btn-sm panel-ajax-trigger hover-visible' )
+				->href( \CCUrl::action( 'edit', array( 'r' => $model->id ) ) )
+				->render();
+		});
 		
 		return $table;
 	}

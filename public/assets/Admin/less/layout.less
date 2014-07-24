@@ -127,6 +127,37 @@ ul.ccd-icon-nav {
 }
 
 /**
+ * Panel
+ */
+#ccd-panel {
+	background-color: #fff;
+	height: 100%;
+	position: fixed;
+	width: 70%;
+	right: 0;
+	z-index: 10;
+	overflow-y: scroll;
+	.box-shadow( -5px 0px 10px rgba(0,0,0,0.2) );
+	-webkit-transition: all 500ms cubic-bezier(0.215, 0.610, 0.355, 1.000); 
+	   -moz-transition: all 500ms cubic-bezier(0.215, 0.610, 0.355, 1.000); 
+		 -o-transition: all 500ms cubic-bezier(0.215, 0.610, 0.355, 1.000); 
+			transition: all 500ms cubic-bezier(0.215, 0.610, 0.355, 1.000); /* easeOutCubic */
+	
+	-webkit-transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000); 
+	   -moz-transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000); 
+		 -o-transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000); 
+			transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000); /* easeOutCubic */
+			
+	-webkit-transform: translate3d(0%, 0, 0);
+	transform: translate3d(0%, 0, 0);
+	
+	&.panel-hidden {
+		-webkit-transform: translate3d(105%, 0, 0);
+		transform: translate3d(105%, 0, 0);
+	}
+}
+
+/**
  * Content container
  */
 #ccd-content-container {
@@ -296,6 +327,15 @@ table.table-ccd {
 	
 	.dataTables_paginate ul.pagination {
 		margin: 0;
+	}
+	
+	tr:hover .hover-visible {
+		opacity: 1;
+	}
+	
+	.hover-visible {
+		opacity: 0.1;
+		.transition( opacity 0.2s );
 	}
 }
 

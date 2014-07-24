@@ -48,6 +48,10 @@
 	</div>
 </div>
 
+<div id="ccd-panel" class="panel-hidden">
+	
+</div>
+
 <div id="ccd-content-container">
 	<div class="clearfix">
 		<div class="content-header content-header-fixed">

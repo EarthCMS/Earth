@@ -188,7 +188,14 @@ class Table
 			
 			foreach( $this->columns as $column )
 			{
-				$record[$column->name()] = $column->format( $result->__get( $column->name() ), $result );
+				if ( $result->__isset( $column->name() ) )
+				{
+					$record[$column->name()] = $column->format( $result->__get( $column->name() ), $result );
+				}
+				else
+				{
+					$record[$column->name()] =  $column->format( null, $result );
+				}
 			}
 			
 			$json['data'][] = $record;
