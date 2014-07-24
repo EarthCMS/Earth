@@ -41,6 +41,28 @@ class AdminController extends \Admin\Controller
 	}
 	
 	/**
+	 * edit action
+	 *
+	 * @return void|CCResponse
+	 */
+	public function action_edit()
+	{
+		$this->modal = true;
+		
+		if ( !$user = \User::find( \CCIn::get( 'r', 0 ) ) )
+		{
+			$user = new \User;
+		}
+		
+		$view = \CCView::create( 'Earth\\Users::detail.view', array(
+			'user' => $user,
+			'new' => ! ( $user->id > 0 )
+		));
+		
+		return \Admin\Panel::create( $view->render() )->response();
+	}
+	
+	/**
 	 * Get the admin table of the users
 	 */
 	public function admin_table()
@@ -71,7 +93,7 @@ class AdminController extends \Admin\Controller
 		$table->column( 'actions', false, false, function( $id, $model ) 
 		{
 			return \UI\HTML::a( '<i class="el-icon-file-edit"></i>' )
-				->class( 'btn btn-dark btn-sm panel-ajax-trigger hover-visible' )
+				->class( 'btn btn-dark btn-sm panel-ajax-trigger hover-visible rounded' )
 				->href( \CCUrl::action( 'edit', array( 'r' => $model->id ) ) )
 				->render();
 		});

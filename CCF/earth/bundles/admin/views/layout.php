@@ -49,7 +49,8 @@
 </div>
 
 <div id="ccd-panel" class="panel-hidden">
-	
+	<div class="panel-container">
+	</div>
 </div>
 
 <div id="ccd-content-container">
