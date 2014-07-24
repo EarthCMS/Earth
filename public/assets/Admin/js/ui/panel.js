@@ -92,6 +92,12 @@ CC.wake.register( function()
 		CC.UI.panel.open();
 	});
 	
+	$( document ).on( 'click', '.panel-close-trigger', function( e ) 
+	{
+		e.preventDefault();
+		CC.UI.panel.close();
+	});
+	
 	$(document).on( 'keyup', function(e) 
 	{
 		if ( e.keyCode == 27 ) 

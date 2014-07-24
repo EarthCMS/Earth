@@ -56,10 +56,11 @@ class AdminController extends \Admin\Controller
 		
 		$view = \CCView::create( 'Earth\\Users::detail.view', array(
 			'user' => $user,
-			'new' => ! ( $user->id > 0 )
 		));
 		
-		return \Admin\Panel::create( $view->render() )->response();
+		return \Admin\Panel::create( $view->render() )
+			->topic( ( $user->id > 0 ) ? $user->email : __(':action.new') )
+			->response();
 	}
 	
 	/**

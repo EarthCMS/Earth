@@ -43,6 +43,20 @@ class Panel
 	);
 	
 	/**
+	 * Does the panel have a close button
+	 *
+	 * @var bool
+	 */
+	protected $has_close = true;
+	
+	/**
+	 * The panel topic
+	 *
+	 * @var bool
+	 */
+	protected $topic = '';
+	
+	/**
 	 * Panel constructor
 	 *
 	 * @param string 			$body
@@ -57,22 +71,44 @@ class Panel
 	 * Set the reponse body
 	 *
 	 * @param string			$body
-	 * @return void
+	 * @return self
 	 */
 	public function body( $body )
 	{
-		$this->response_json['body'] = $body;
+		$this->response_json['body'] = $body; return $this;
 	}
 	
 	/**
 	 * Set the reponse body
 	 *
 	 * @param bool			$tf
-	 * @return void
+	 * @return self
 	 */
 	public function close( $tf = true )
 	{
-		$this->response_json['close'] = (bool) $tf;
+		$this->response_json['close'] = (bool) $tf;  return $this;
+	}
+	
+	/**
+	 * Add a close button to the panel
+	 *
+	 * @param bool			$tf
+	 * @return self
+	 */
+	public function close_button( $tf = true )
+	{
+		$this->has_close = (bool) $tf; return $this;
+	}
+	
+	/**
+	 * Set the panel topic
+	 *
+	 * @param bool			$tf
+	 * @return self
+	 */
+	public function topic( $topic = '' )
+	{
+		$this->topic = $topic; return $this;
 	}
 	
 	/**
@@ -82,6 +118,12 @@ class Panel
 	 */
 	public function response()
 	{
+		$this->response_json['body'] = \CCView::create( 'Admin::panel.view', array(
+			'body' => $this->response_json['body'],
+			'close' => $this->has_close,
+			'topic' => $this->topic,
+		))->render();
+		
 		return \CCResponse::json( $this->response_json );
 	}
 }
