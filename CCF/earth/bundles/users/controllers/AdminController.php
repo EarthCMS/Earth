@@ -33,7 +33,7 @@ class AdminController extends \Admin\Controller
 	public function action_index()
 	{
 		$this->theme->content_topic = __( ':action.topic' );
-		$this->theme->content_header = \CCView::create( 'Admin::content-search.view' );
+		$this->theme->content_header[] = \CCView::create( 'Admin::content-search.view' );
 		
 		$this->view = $this->theme->view( 'Earth\\Users::table.view' );
 		

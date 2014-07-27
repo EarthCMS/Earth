@@ -26,7 +26,7 @@ return array(
          */
         'js'	=> '',
         
-        'content_header' => '',
+        'content_header' => array(),
         'content_topic' => '',
     ), 
     

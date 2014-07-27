@@ -163,7 +163,7 @@ ul.ccd-icon-nav {
  */
 #ccd-content-container {
 	background-color: @color-background;
-	min-height: 1900px;
+	padding-bottom: 20px;
 	margin-left: 350px;
 	position: relative;
 	
@@ -178,7 +178,7 @@ ul.ccd-icon-nav {
 .content-header {
 	background-color: #eee;
 	height: 60px;
-	.box-shadow( 0 2px 4px rgba(0,0,0,0.1) );
+	border-bottom: 1px solid #E2E2E2;
 	
 	&.content-header-fixed {
 		padding-right: 350px;
@@ -188,42 +188,55 @@ ul.ccd-icon-nav {
 		z-index: 5;
 	}
 	
-	.page-topic h2 {
+	.header-item {
+		color: #AFB8C5;
+		
+		a {
+			color: #AFB8C5;
+			
+			&:hover {
+				color: darken( #AFB8C5, 10% );
+			}
+		}
+		
+		float: left;
 		height: 60px;
+		line-height: 60px;
+		border-right: 1px #E2E2E2 solid;
+		margin-right: 20px;
+		
+		&.pull-right {
+			border-right: none;
+			margin-right: 20px;
+			border-left: 1px #E2E2E2 solid;
+			padding-left: 20px;
+		}
+	}
+	
+	.page-topic h2 {
 		font-size: 20px;
-		padding-left: 20px;
 		line-height: 20px;
 	}
 	
 	.panel-close-trigger {
-		.square(60px);
-		display: block;
-		font-size: 22px;
-		text-align: center;
-		color: #ccc;
+		font-size: 18px;
 		line-height: 66px;
-		
-		&:hover {
-			color: #333;
-		}
 	}
 	
 	.content-search {
-		float: right;
-		margin-top: 10px;
-		margin-right: 10px;
+		
+		padding-left: 30px;
 		
 		.el-icon-search {
 			position: absolute;
-			line-height: 45px;
-			margin-left: 10px;
+			line-height: 60px;
+			margin-left: -10px;
 			z-index: -1;
-			color: #ccc;
+			color: #AFB8C5;
 		}
 		
 		input {
-			text-align: right;
-			min-width: 200px;
+			display: inline-block;
 		}
 	}
 }

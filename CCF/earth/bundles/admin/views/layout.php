@@ -56,10 +56,12 @@
 <div id="ccd-content-container">
 	<div class="clearfix">
 		<div class="content-header content-header-fixed">
-			<div>
-				<?php echo $content_header; ?>
+			<?php foreach( $content_header as $header ) : ?>
+			<div class="header-item">
+				<?php echo $header; ?>
 			</div>
-			<div class="page-topic">
+			<?php endforeach; ?>
+			<div class="header-item pull-right page-topic">
 				<h2><?php echo $content_topic; ?></h2>
 			</div>
 		</div>
