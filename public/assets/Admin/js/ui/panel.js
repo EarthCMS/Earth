@@ -51,6 +51,9 @@ CC.UI.panel =
 			data = {};
 		}
 		
+		// set loading
+		CC.UI.loading( CC.UI.panel.container );
+		
 		$.ajax(
 		{
 			type: method.toUpperCase(),
@@ -67,6 +70,8 @@ CC.UI.panel =
 			{
 				CC.UI.panel.close();
 			}
+			
+			CC.UI.loading( CC.UI.panel.container, true );
 		});
 	},
 }
