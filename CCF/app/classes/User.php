@@ -62,16 +62,6 @@ class User extends Auth\User
 	}
 	
 	/**
-	 * Is this user a super one?
-	 *
-	 * @return bool
-	 */
-	public function is_su()
-	{
-		return true;
-	}
-	
-	/**
 	 * Return the users avatar
 	 *
 	 * @param $size

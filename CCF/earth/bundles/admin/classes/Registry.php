@@ -66,7 +66,7 @@ class Registry
 		// the admin route namespace and we are logged in as super user.
 		$prefix = Earth::$config->get( 'admin.uri' );
 		
-		if ( substr( \CCIn::uri(), 0, strlen( $prefix ) ) === $prefix && Earth::$user->is_su() )
+		if ( substr( \CCIn::uri(), 0, strlen( $prefix ) ) === $prefix && Earth::$user->is_admin() )
 		{
 			foreach( static::$modules as $uri => $callback )
 			{

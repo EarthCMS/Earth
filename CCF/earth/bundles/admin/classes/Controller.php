@@ -25,7 +25,7 @@ class Controller extends \CCViewController
 	 */
 	public function wake()
 	{
-		if ( !\Earth::$user->is_su() )
+		if ( !\Earth::$user->is_admin() )
 		{
 			return CCRedirect::to( '@auth.sign_in' );
 		}
