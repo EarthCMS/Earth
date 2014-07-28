@@ -60,18 +60,32 @@ body, html {
 			color: #ccc;
 		}
 		
-		.module-topic h2 {
-			display: block;
-			padding: 0 20px;
-			background-color: darken( @color-dark, 2% );
-			height: 40px;
-			font-size: 16px;
-			padding-left: 20px;
-			line-height: 40px;
-			color: #ccc;
-			
-			&:hover {
-				background-color: lighten( @color-dark, 5% );
+		.module-list {
+		
+			.module-topic {
+				
+				h2 {
+					display: block;
+					padding: 0 20px;
+					background-color: darken( @color-dark, 2% );
+					margin-bottom: 1px;
+					height: 40px;
+					font-size: 16px;
+					padding-left: 20px;
+					line-height: 40px;
+					color: #ccc;
+					border-left: 3px solid transparent;
+					
+					.transition( border ease-in-out 0.2s );
+				}
+				
+				&:hover h2 {
+					border-left: 3px solid darken( @color-main, 20% );
+				}
+				
+				&.active h2 {
+					border-left: 3px solid @color-main;
+				}
 			}
 		}
 	}

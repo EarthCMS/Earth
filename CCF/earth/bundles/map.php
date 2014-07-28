@@ -35,6 +35,7 @@ Admin\Registry::add( 'users', function( $module )
 	{
 		$module->title = __('Earth\\Users::controller/group.topic');
 		$module->controller = 'Earth\\Users::Group';
+		$module->sidebar = "Earth\\Users::sidebar/groups.view";
 	});
 });
 

@@ -47,18 +47,25 @@
 			<h1><?php echo $topic; ?></h1>
 		</div>
 		<?php echo $active_admin_submodule->sidebar(); ?>
+		
+		
+		<?php if ( count( $active_admin_module->modules ) > 0 ) : ?>
+		<div class="pdn10">
+			<hr style="border-color: #333">
+		</div>
+		
 		<!-- subnavi -->
-		<div class="mrt20">
-			<a class="module-topic" href="<?php echo $active_admin_module->link(); ?>">
+		<div class="module-list">
+			<a class="module-topic <?php echo $active_admin_module == $active_admin_submodule ? 'active' : ''; ?>" href="<?php echo $active_admin_module->link(); ?>">
 				<h2><?php echo $active_admin_module->title(); ?></h2>
 			</a>
 			<?php foreach( $active_admin_module->modules as $submodule ) : ?>
-			<a class="module-topic" href="<?php echo $submodule->link(); ?>">
+			<a class="module-topic <?php echo $submodule->active ? 'active' : ''; ?>" href="<?php echo $submodule->link(); ?>">
 				<h2><?php echo $submodule->title(); ?></h2>
 			</a>
 			<?php endforeach; ?>
 		</div>
-		
+		<?php endif; ?>
 	</div>
 </div>
 
