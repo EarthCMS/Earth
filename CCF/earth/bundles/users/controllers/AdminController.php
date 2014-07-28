@@ -48,9 +48,12 @@ class AdminController extends \Admin\Controller
 	public function action_edit()
 	{
 		// recive the user
-		if ( !$user = \User::find( \CCIn::get( 'r', 0 ) ) )
+		if ( !$user = \User::find( \CCIn::get( 'r', \CCIn::post( 'r', 0 ) ) ) )
 		{
 			$user = new \User;
+			
+			// new user need a default password we generate one
+			$user->password = $password = \CCStr::random(6);
 		}
 		
 		// create the detail view
@@ -68,11 +71,30 @@ class AdminController extends \Admin\Controller
 		// work with post data
 		if ( \CCIn::method( 'post' ) )
 		{
-			$user->strict_assign( array( 'email', 'name' ), CCIn::all( 'post' ) );
+			$user->strict_assign( array( 'email', 'name', 'group_id' ), \CCIn::all( 'post' ) );
 			
-			$user->save();
+			$validator = \CCValidator::post();
 			
-			\UI\Alert::add( 'success', 'Data have been saved!' );
+			$validator->rules( 'email', 'required', 'email' );
+			$validator->rules( 'name', 'required', 'between:3,50' );
+			$validator->in( 'group_id', array_keys( $view->groups ) );
+			
+			if ( $validator->success() )
+			{
+				$user->save();
+				
+				\UI\Alert::add( 'success', __( 'Earth::message.success.save' ) );
+				
+				// show new password
+				if ( isset( $password ) )
+				{
+					\UI\Alert::add( 'info', __( ':action.password_created', array( 'password' => $password ) ) );
+				}
+			}
+			else
+			{
+				\UI\Alert::add( 'danger', $validator->errors() );
+			}
 		}
 		
 		// return panel view

@@ -28,6 +28,7 @@ Admin\Registry::add( 'users', function( $module )
 	$module->title = __('Earth\\Users::controller/admin.topic');
 	$module->controller = 'Earth\\Users::Admin';
 	$module->icon = "el-icon-user";
+	$module->sidebar = "Earth\\Users::sidebar/users.view";
 	
 	// groups submodule
 	/*$module->add( 'groups', function( $module ) 

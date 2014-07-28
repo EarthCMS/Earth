@@ -29,8 +29,13 @@
 		</a>
 		<ul class="ccd-icon-nav">
 			
-		<?php foreach( $admin_modules as $module ) : ?>
-			<li class="<?php echo CCUrl::active( $module->link() ) ? 'active' : ''; ?>"><a href="<?php echo $module->link(); ?>">
+		<?php $active_module = null; foreach( $admin_modules as $module ) :
+		if ( CCUrl::active( $module->link() ) )
+		{
+			$active_module = $module;
+		}	
+		?>
+			<li class="<?php echo $active_module == $module ? 'active' : ''; ?>"><a href="<?php echo $module->link(); ?>">
 				<span class="icon-nav-label"><?php echo $module->title(); ?></span>
 				<?php if ( $module->is_image() ) : ?>
 				<img class="image-icon" alt="<?php echo $module->title(); ?>" src="<?php echo $module->icon(); ?>" />
@@ -45,6 +50,7 @@
 		<div class="page-topic">
 			<h1><?php echo $topic; ?></h1>
 		</div>
+		<?php echo $active_module->sidebar(); ?>
 	</div>
 </div>
 

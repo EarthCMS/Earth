@@ -32,6 +32,13 @@ class Module
 	public $controller = '';
 	
 	/**
+	 * The admin sidebar
+	 *
+	 * @var string
+	 */
+	public $sidebar = null;
+	
+	/**
 	 * The module icon class or png image
 	 *
 	 * @var string
@@ -91,5 +98,20 @@ class Module
 		}
 		
 		return $this->icon;
+	}
+	
+	/**
+	 * Get the sidebar view contentes
+	 *
+	 * @return string
+	 */
+	public function sidebar()
+	{
+		if ( !is_null( $this->sidebar ) )
+		{
+			return \CCView::create( $this->sidebar )->render();
+		}
+		
+		return '';
 	}
 }

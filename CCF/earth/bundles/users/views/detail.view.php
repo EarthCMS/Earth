@@ -1,10 +1,13 @@
 {% use UI\Form; %}
-{{Form::start( 'user-detail', array( 'method' => 'post', 'class' => 'panel-form', action => CCUrl::action( 'edit', array(), true ) ) )}}
+{{Form::start( 'user-detail', array( 'method' => 'post', 'class' => 'panel-form', action => CCUrl::action( 'edit' ) ) )}}
 <div class="row">
 	<div class="col-md-4">
 		<img style="width: 100%;" src="{{$user->avatar()}}" class="box-shadow" />
 	</div>
 	<div class="col-md-8">
+		
+		{{Form::input('r', $user->id, 'hidden')}}
+		
 		<div class="form-group">
 			{{Form::label('name', $user->__('name'))}}
 			{{Form::input('name', $user->name )}}
@@ -20,12 +23,20 @@
 		<div class="row">
 			<div class="col-md-6">
 				<small>{{$user->__('created_at')}}:</small>
-				{{CCDate::format( $user->created_at )}}
+				{% if $user->created_at == 0 %}
+					{{__('Earth::common.never')}}
+				{% else %}
+					{{CCDate::format( $user->created_at )}}
+				{% endif %}
 			</div>
 			<div class="col-md-6">
 				<small>{{$user->__('last_login')}}:</small>
-				{{CCDate::format( $user->last_login )}}
-				<small>({{CCDate::relative( $user->last_login )}})</small>
+				{% if $user->last_login == 0 %}
+					{{__('Earth::common.never')}}
+				{% else %}
+					{{CCDate::format( $user->last_login )}}
+					<small>({{CCDate::relative( $user->last_login )}})</small>
+				{% endif %}
 			</div>
 		</div>
 	</div>
