@@ -39,6 +39,23 @@ Admin\Registry::add( 'users', function( $module )
 	});
 });
 
+/*
+ *---------------------------------------------------------------
+ * Page Bundle
+ *---------------------------------------------------------------
+ * 
+ * Users administration bundle
+ */
+CCFinder::bundle( 'Earth\\Pages', CCFPATH.'earth/bundles/pages/' );
+
+// register the admin module
+Admin\Registry::add( 'pages', function( $module ) 
+{
+	$module->title = __('Earth\\Pages::controller/admin.topic');
+	$module->controller = 'Earth\\Pages::Admin';
+	$module->icon = "el-icon-th-list";
+});
+
 
 /*
  *---------------------------------------------------------------

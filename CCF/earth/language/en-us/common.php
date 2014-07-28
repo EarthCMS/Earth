@@ -1,3 +1,4 @@
 <?php return array(
-	'save' => 'Save'
+	'save' => 'Save',
+	'never' => 'never',
 );
