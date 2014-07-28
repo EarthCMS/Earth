@@ -59,6 +59,21 @@ body, html {
 			line-height: 20px;
 			color: #ccc;
 		}
+		
+		.module-topic h2 {
+			display: block;
+			padding: 0 20px;
+			background-color: darken( @color-dark, 2% );
+			height: 40px;
+			font-size: 16px;
+			padding-left: 20px;
+			line-height: 40px;
+			color: #ccc;
+			
+			&:hover {
+				background-color: lighten( @color-dark, 5% );
+			}
+		}
 	}
 }
 
@@ -168,6 +183,7 @@ ul.ccd-icon-nav {
 	padding-bottom: 20px;
 	margin-left: 350px;
 	position: relative;
+	min-height: 650px;
 	
 	color: @font-color;
 	

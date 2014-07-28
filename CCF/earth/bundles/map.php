@@ -31,11 +31,11 @@ Admin\Registry::add( 'users', function( $module )
 	$module->sidebar = "Earth\\Users::sidebar/users.view";
 	
 	// groups submodule
-	/*$module->add( 'groups', function( $module ) 
+	$module->add( 'groups', function( $module ) 
 	{
 		$module->title = __('Earth\\Users::controller/group.topic');
 		$module->controller = 'Earth\\Users::Group';
-	});*/
+	});
 });
 
 

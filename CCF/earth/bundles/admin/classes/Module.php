@@ -46,6 +46,20 @@ class Module
 	public $icon = '';
 	
 	/**
+	 * A module can have submodules
+	 *
+	 * @var array
+	 */
+	public $modules = array();
+	
+	/**
+	 * Is this module currently active
+	 *
+	 * @var bool
+	 */ 
+	public $active = false;
+	
+	/**
 	 * Get the modules title
 	 *
 	 * @return string
@@ -113,5 +127,19 @@ class Module
 		}
 		
 		return '';
+	}
+	
+	/**
+	 * Add a submodule to the current one. At the 
+	 * moment there is only one dimension of submodules supported.
+	 *
+	 * @param string 		$uri
+	 * @param closure		$module
+	 * 
+	 * @return void
+	 */
+	public function add( $uri, $module )
+	{
+		$this->modules[$uri] = $module;
 	}
 }

@@ -29,13 +29,8 @@
 		</a>
 		<ul class="ccd-icon-nav">
 			
-		<?php $active_module = null; foreach( $admin_modules as $module ) :
-		if ( CCUrl::active( $module->link() ) )
-		{
-			$active_module = $module;
-		}	
-		?>
-			<li class="<?php echo $active_module == $module ? 'active' : ''; ?>"><a href="<?php echo $module->link(); ?>">
+		<?php foreach( $admin_modules as $module ) : ?>
+			<li class="<?php echo $module->active ? 'active' : ''; ?>"><a href="<?php echo $module->link(); ?>">
 				<span class="icon-nav-label"><?php echo $module->title(); ?></span>
 				<?php if ( $module->is_image() ) : ?>
 				<img class="image-icon" alt="<?php echo $module->title(); ?>" src="<?php echo $module->icon(); ?>" />
@@ -47,10 +42,23 @@
 		</ul>
 	</div>
 	<div class="sub-navigation">
+		<!-- main module -->
 		<div class="page-topic">
 			<h1><?php echo $topic; ?></h1>
 		</div>
-		<?php echo $active_module->sidebar(); ?>
+		<?php echo $active_admin_submodule->sidebar(); ?>
+		<!-- subnavi -->
+		<div class="mrt20">
+			<a class="module-topic" href="<?php echo $active_admin_module->link(); ?>">
+				<h2><?php echo $active_admin_module->title(); ?></h2>
+			</a>
+			<?php foreach( $active_admin_module->modules as $submodule ) : ?>
+			<a class="module-topic" href="<?php echo $submodule->link(); ?>">
+				<h2><?php echo $submodule->title(); ?></h2>
+			</a>
+			<?php endforeach; ?>
+		</div>
+		
 	</div>
 </div>
 

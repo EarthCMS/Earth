@@ -45,6 +45,25 @@ class Theme extends \Packtacular\Theme
 		// assign the moduels
 		$this->admin_modules = Registry::modules();
 		
+		// get the last active module
+		foreach( $this->admin_modules as $module )
+		{
+			if ( $module->active )
+			{
+				$this->active_admin_module = $module;
+				$this->active_admin_submodule = $module;
+			}
+			
+			// and submodules
+			foreach( $module->modules as $submodule )
+			{
+				if ( $submodule->active )
+				{
+					$this->active_admin_submodule = $submodule;
+				}
+			} 
+		}	
+		
 		// render the theme
 		return parent::render( $file );
 	}
