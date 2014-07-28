@@ -77,24 +77,28 @@ CC.UI.panel =
 		// jquery object might be a form or an other element
 		if ( target instanceof jQuery )
 		{
-			// we just assume an form element here, we probalby 
-			// have to change that one day.
-			
+			// use href 
+			if ( target.hasAttribute( 'href' ) )
+			{
+				target = target.attr( 'href' );
+			}
+			else if ( target.hasData( 'target' ) )
+			{
+				target = target.data( 'target' );
+			}
 		}
-		else 
+		
+		$.ajax(
 		{
-			$.ajax(
-			{
-				type: 'GET',
-				url: target,
-				cache: false,
-				dataType: 'json',
-			})
-			.done( function( response ) 
-			{
-				CC.UI.panel.json_response_reciver( response );
-			});
-		}	
+			type: 'GET',
+			url: target,
+			cache: false,
+			dataType: 'json',
+		})
+		.done( function( response ) 
+		{
+			CC.UI.panel.json_response_reciver( response );
+		});
 	},
 }
 
@@ -108,16 +112,27 @@ CC.wake.register( function()
 	{
 		e.preventDefault();
 		
-		var $this = $(this);
+		var $this = $(this),
+			
+		run_request = function()
+		{
+			CC.UI.panel.ajax( $this.attr( 'href' ) );
+			CC.UI.panel.open();
+		};
 		
+		// when the panel is open we run the request after a short delay
 		if ( CC.UI.panel.is_open() )
 		{
 			CC.UI.panel.close();
+			
+			setTimeout( function() {
+				run_request();
+			}, 500 );
 		}
-		
-		CC.UI.panel.ajax( $this.attr( 'href' ) );
-		
-		CC.UI.panel.open();
+		else
+		{
+			run_request()
+		}
 	});
 	
 	// panel close button
