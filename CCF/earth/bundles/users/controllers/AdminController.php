@@ -85,6 +85,12 @@ class AdminController extends \Admin\Controller
 			$validator->rules( 'name', 'required', 'between:3,50' );
 			$validator->in( 'group_id', array_keys( $view->groups ) );
 			
+			// check if current user trying to change itself
+			if ( $user->id === \Earth::$user->id && \Earth::$user->group_id != $user->group_id )
+			{
+				$validator->add_error( 'group_id', __(':action.cant_change_own_group') );
+			}
+						
 			if ( $validator->success() )
 			{
 				$user->save();

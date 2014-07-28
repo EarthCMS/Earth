@@ -8,4 +8,5 @@
 	
 	'edit.new' => 'New user',
 	'edit.password_created' => 'Following password has been generated: :password',
+	'edit.cant_change_own_group' => 'You cannot change your own group as an administrator.',
 );
