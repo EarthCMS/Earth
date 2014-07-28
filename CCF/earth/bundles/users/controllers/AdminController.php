@@ -47,19 +47,38 @@ class AdminController extends \Admin\Controller
 	 */
 	public function action_edit()
 	{
-		$this->modal = true;
-		
+		// recive the user
 		if ( !$user = \User::find( \CCIn::get( 'r', 0 ) ) )
 		{
 			$user = new \User;
 		}
 		
+		// create the detail view
 		$view = \CCView::create( 'Earth\\Users::detail.view', array(
 			'user' => $user,
 		));
 		
+		// add available user groups
+		$view->groups = array( 0 => $user->__( 'no-group' ) );
+		foreach( \Group::find() as $group )
+		{
+			$view->groups[$group->id] = $group->name;
+		}
+		
+		// work with post data
+		if ( \CCIn::method( 'post' ) )
+		{
+			$user->strict_assign( array( 'email', 'name' ), CCIn::all( 'post' ) );
+			
+			$user->save();
+			
+			\UI\Alert::add( 'success', 'Data have been saved!' );
+		}
+		
+		// return panel view
 		return \Admin\Panel::create( $view->render() )
 			->topic( ( $user->id > 0 ) ? $user->email : __(':action.new') )
+			->header( 'save', '#user-detail-form' )
 			->response();
 	}
 	
@@ -82,6 +101,7 @@ class AdminController extends \Admin\Controller
 				->height( '32px' )
 				->render();
 		});
+		$table->column( 'name', true, true );
 		$table->column( 'email', true, true );
 		$table->column( 'group', false, false, function( $group, $model ) 
 		{

@@ -15,7 +15,7 @@ Admin\Registry::add( 'index', function( $module )
 
 /*
  *---------------------------------------------------------------
- * Users Bundle
+ * Users & Groups Bundle
  *---------------------------------------------------------------
  * 
  * Users administration bundle
@@ -28,6 +28,13 @@ Admin\Registry::add( 'users', function( $module )
 	$module->title = __('Earth\\Users::controller/admin.topic');
 	$module->controller = 'Earth\\Users::Admin';
 	$module->icon = "el-icon-user";
+	
+	// groups submodule
+	/*$module->add( 'groups', function( $module ) 
+	{
+		$module->title = __('Earth\\Users::controller/group.topic');
+		$module->controller = 'Earth\\Users::Group';
+	});*/
 });
 
 

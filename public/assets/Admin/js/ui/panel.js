@@ -35,44 +35,66 @@ CC.UI.panel =
 	},
 	
 	/**
+	 * Work with a json response
+	 */
+	json_response_reciver: function( response )
+	{
+		CC.UI.panel.container.html( response.body );
+		
+		// register new ajax forms
+		$('.panel-form').ajaxForm(
+		{
+			dataType: 'json', 
+				
+			success: function( response )
+			{
+				CC.UI.panel.json_response_reciver( response );
+				CC.UI.loading( CC.UI.panel.container, true );
+			},
+			
+			beforeSubmit: function()
+			{
+				CC.UI.loading( CC.UI.panel.container, false );
+			}	
+		});
+		
+		if ( response.close == true )
+		{
+			CC.UI.panel.close();
+		}
+		
+		CC.UI.loading( CC.UI.panel.container, true );
+	},
+	
+	/**
 	 * Load data using ajax in the panel
 	 */
-	ajax: function( url, data, method )
-	{
-		// default method
-		if ( method === undefined )
-		{
-			method = 'GET';
-		}
-		
-		// default data
-		if ( data === undefined )
-		{
-			data = {};
-		}
-		
+	ajax: function( target )
+	{	
 		// set loading
 		CC.UI.loading( CC.UI.panel.container );
-		
-		$.ajax(
-		{
-			type: method.toUpperCase(),
-			url: url,
-			data: data,
-			cache: false,
-			dataType: 'json',
-		})
-		.done( function( response ) 
-		{
-			CC.UI.panel.container.html( response.body );
 			
-			if ( response.close )
+		// jquery object might be a form or an other element
+		if ( target instanceof jQuery )
+		{
+			// we just assume an form element here, we probalby 
+			// have to change that one day.
+			
+		}
+		else 
+		{
+			$.ajax(
 			{
-				CC.UI.panel.close();
-			}
-			
-			CC.UI.loading( CC.UI.panel.container, true );
-		});
+				type: 'GET',
+				url: target,
+				cache: false,
+				dataType: 'json',
+			})
+			.done( function( response ) 
+			{
+				CC.UI.panel.json_response_reciver( response );
+			});
+		}	
 	},
 }
 
@@ -81,6 +103,7 @@ CC.UI.panel =
  */
 CC.wake.register( function() 
 {
+	// ajax panel
 	$( document ).on( 'click', '.panel-ajax-trigger', function( e ) 
 	{
 		e.preventDefault();
@@ -97,12 +120,26 @@ CC.wake.register( function()
 		CC.UI.panel.open();
 	});
 	
+	// panel close button
 	$( document ).on( 'click', '.panel-close-trigger', function( e ) 
 	{
 		e.preventDefault();
 		CC.UI.panel.close();
 	});
 	
+	// fornm submit from external form
+	$( document ).on( 'click', '.panel-form-submit-trigger', function( e ) 
+	{
+		e.preventDefault();
+		var target = $( $(this).data( 'target' ) );
+		
+		if ( target !== undefined )
+		{
+			target.submit();
+		}
+	});
+	
+	// esc key exit panel
 	$(document).on( 'keyup', function(e) 
 	{
 		if ( e.keyCode == 27 ) 

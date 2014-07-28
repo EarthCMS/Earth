@@ -65,5 +65,8 @@ return array(
 		'datatables/js/jquery.dataTables.min.js' => 'vendor@lib',
 		'datatables/js/jquery.bootstrap.dataTables.js' => 'vendor@lib',
 		//'datatables/css/jquery.dataTables.min.css' => 'vendor@style',
+		
+		// ajax forms
+		'jquery-form/jquery.form.js' => 'vendor@lib',
 	)
 );

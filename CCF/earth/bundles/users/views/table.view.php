@@ -3,6 +3,7 @@
 		<tr>
 			<th width="10px">ID</th>
 			<th width="32px">&nbsp;</th>
+			<th>Name</th>
 			<th>Email</th>
 			<th>Group</th>
 			<th>Member since</th>

@@ -57,6 +57,13 @@ class Panel
 	protected $topic = '';
 	
 	/**
+	 * The panel headers
+	 *
+	 * @var bool
+	 */
+	protected $headers = array();
+	
+	/**
 	 * Panel constructor
 	 *
 	 * @param string 			$body
@@ -112,6 +119,44 @@ class Panel
 	}
 	
 	/**
+	 * Add a header item to the panel
+	 *
+	 * @param string			$header
+	 * @return self
+	 */
+	public function header( $header )
+	{
+		$args = func_get_args();
+		
+		$header = array_shift( $args );
+		
+		if ( is_string( $header ) )
+		{
+			$method = 'header_'.$header;
+			
+			if ( method_exists( $this, $method ) )
+			{
+				$header = call_user_func_array( array( $this, $method ), $args );
+			}
+		}
+		
+		$this->headers[] = $header; return $this;
+	}
+	
+	/**
+	 * Default seve header
+	 *
+	 * @return string
+	 */
+	public function header_save( $form_id )
+	{
+		return \UI\HTML::a( '<i class="el-icon-ok-circle"></i> '.
+			__( 'Earth::common.save' ) )
+			->class( 'btn btn-success panel-form-submit-trigger' )
+			->data( 'target', $form_id );
+	}
+	
+	/**
 	 * Get the CCResponse for the panel
 	 *
 	 * @return CCResponse
@@ -122,6 +167,7 @@ class Panel
 			'body' => $this->response_json['body'],
 			'close' => $this->has_close,
 			'topic' => $this->topic,
+			'headers' => $this->headers,
 		))->render();
 		
 		return \CCResponse::json( $this->response_json );

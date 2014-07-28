@@ -26,6 +26,7 @@ class User extends Auth\User
 		'active'			=> array( 'bool', true ),
 		'group_id'		=> 0,
 		'email'			=> null,
+		'name'			=> null,
 		'password'		=> null,
 		'storage'		=> array( 'json', array() ),
 		'last_login'		=> array( 'timestamp', 0 ),
@@ -59,6 +60,16 @@ class User extends Auth\User
 		$user->save();
 		
 		return $user;
+	}
+	
+	/**
+	 * Get the user group
+	 *
+	 * @return \Auth\Group
+	 */
+	public function group()
+	{
+		return $this->belongs_to( 'Group' );
 	}
 	
 	/**
