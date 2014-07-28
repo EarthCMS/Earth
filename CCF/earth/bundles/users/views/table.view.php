@@ -1,4 +1,8 @@
-<table id="example" class="table table-ccd" cellspacing="0" width="100%">
+<?php
+$group_id = isset( $group_id ) ? $group_id : null;
+$search = isset( $search ) ? $search : true;
+?>
+<table id="user-list-view" class="table table-ccd" cellspacing="0" width="100%">
 	<thead>
 		<tr>
 			<th width="10px">ID</th>
@@ -12,9 +16,14 @@
 	</thead>
 </table>
 
-<?php $theme->capture_append( 'js', function() use( $table ) 
+<?php $theme->capture_append( 'js', function() use( $table, $group_id, $search ) 
 { 
-	$init = $table->jsinit( '#example', to('@admin.users/listsource') );
-	$init->set( 'searchfield', '#content-search-input' );
+	$init = $table->jsinit( '#user-list-view', to('@admin.users/listsource', array( 'group' => $group_id )) );
+	
+	if ( $search )
+	{
+		$init->set( 'searchfield', '#content-search-input' );
+	}
+	
 	echo $init->render();
 }); ?>

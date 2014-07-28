@@ -57,6 +57,16 @@ class GroupController extends \Admin\Controller
 		$view = \CCView::create( 'Earth\\Users::group/detail.view', array(
 			'group' => $group,
 		));
+		
+		// add the user list
+		
+		$controller = \CCController::create( 'Earth\\Users::Admin' );
+		
+		$view->user_list = $this->theme->view( 'Earth\\Users::table.view' );
+		$view->user_list->table = $controller->admin_table();
+		$view->user_list->group_id = $group->id;
+		$view->user_list->search = false;
+		
 				
 		// work with post data
 		if ( \CCIn::method( 'post' ) )

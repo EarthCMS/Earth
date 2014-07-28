@@ -1,7 +1,7 @@
 <script>
 $(document).ready(function() 
 {
-	userstable = $('{{$target}}').dataTable(
+	var datatable = $('{{$target}}').dataTable(
 	{
 		"dom": 'rt<"dataTable_footer"ip>',
 		"processing": true,
@@ -27,7 +27,7 @@ $(document).ready(function()
 	{% if $searchfield %}
 	$('{{$searchfield}}').keyup(function()
 	{
-		  userstable.fnFilter( $(this).val() );
+		  datatable.fnFilter( $(this).val() );
 	});
 	{% endif %}
 });

@@ -13,6 +13,13 @@ use Carbon\Carbon;
 
 class AdminController extends \Admin\Controller
 {
+	/** 
+	 * Allow this controller to be used with a special group as filter
+	 *
+	 * @param Group
+	 */ 
+	public $group = null;
+	
 	/**
 	 * controller wake
 	 * 
@@ -36,7 +43,6 @@ class AdminController extends \Admin\Controller
 		$this->theme->content_header[] = \CCView::create( 'Admin::content-search.view' );
 		
 		$this->view = $this->theme->view( 'Earth\\Users::table.view' );
-		
 		$this->view->table = $this->admin_table();
 	}
 	
@@ -150,7 +156,14 @@ class AdminController extends \Admin\Controller
 	 * @return void|CCResponse
 	 */
 	public function action_listsource()
-	{
-		return $this->admin_table()->response( null, array( 'group' ) );
+	{		
+		return $this->admin_table()->response( function($q)
+		{
+			// filter by group if group is set
+			if ( \CCIn::get( 'group', false ) )
+			{
+				$q->where( 'group_id', (int) \CCIn::get( 'group' ) );
+			}
+		}, array( 'group' ) );
 	}
 }

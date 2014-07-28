@@ -104,6 +104,8 @@ class Table
 			// filter the rest
 			$this->filter_query( $q, $callback );
 		});
+		
+		
 	}
 	
 	/** 
@@ -119,33 +121,38 @@ class Table
 		$search = CCIn::get( 'search' );
 		$search_term = trim( $search['value'] );
 		
-		// searchable
-		foreach( $this->columns as $key => $column )
-		{			
-			// searchable
-			if ( $column->searchable() )
-			{
-				$q->or_where( $column->name(), 'like', '%'.$search_term.'%' );
-			}
+		if ( !is_null( $callback ) ) 
+		{
+			call_user_func_array( $callback, array( &$q ) );
 		}
+		
+		$columns = $this->columns;
+		
+		$q->where( function($q) use( $columns, $search_term, $order_params )
+		{
+			// searchable
+			foreach( $columns as $key => $column )
+			{			
+				// searchable
+				if ( $column->searchable() )
+				{
+					$q->or_where( $column->name(), 'like', '%'.$search_term.'%' );
+				}
+			}
+		});
 		
 		// sortable
 		foreach( $order_params as $order )
 		{
-			if ( isset( $this->columns[$order['column']] ) )
+			if ( isset( $columns[$order['column']] ) )
 			{
-				$column = $this->columns[$order['column']];
+				$column = $columns[$order['column']];
 				
 				if ( $column->sortable() )
 				{
 					$q->order_by( $column->name(), $order['dir'] === 'asc' ? 'asc' : 'desc' );
 				}
 			}
-		}
-		
-		if ( !is_null( $callback ) ) 
-		{
-			call_user_func_array( $callback, array( &$q ) );
 		}
 	}
 	
