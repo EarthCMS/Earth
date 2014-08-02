@@ -68,5 +68,12 @@ return array(
 		
 		// ajax forms
 		'jquery-form/jquery.form.js' => 'vendor@lib',
+		
+		// jquery ui
+		'jquery-ui/jquery-ui.min.js' => 'vendor@lib',
+		'jquery-ui/jquery-ui.min.css' => 'vendor@style',
+		
+		// jquery sortable
+		'jquery-sortable/jquery.mjs.nestedSortable.js' => 'vendor@lib',
 	)
 );
