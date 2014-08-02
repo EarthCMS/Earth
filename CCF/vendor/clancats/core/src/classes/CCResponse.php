@@ -86,7 +86,7 @@ class CCResponse
 	
 	
 	/**
-	 * Response factory 
+	 * response factory 
 	 * create new responses
 	 * 
 	 * @param string 	$body

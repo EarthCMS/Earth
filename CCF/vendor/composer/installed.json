@@ -193,17 +193,17 @@
     },
     {
         "name": "clancats/core",
-        "version": "v2.0.2",
-        "version_normalized": "2.0.2.0",
+        "version": "v2.0.3",
+        "version_normalized": "2.0.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/ClanCats/Core.git",
-            "reference": "0ad2980f3a80368e774329fecc67dbf119fce650"
+            "reference": "aa0de7d1c203ad0266e4826cc6499867322514f8"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/ClanCats/Core/zipball/0ad2980f3a80368e774329fecc67dbf119fce650",
-            "reference": "0ad2980f3a80368e774329fecc67dbf119fce650",
+            "url": "https://api.github.com/repos/ClanCats/Core/zipball/aa0de7d1c203ad0266e4826cc6499867322514f8",
+            "reference": "aa0de7d1c203ad0266e4826cc6499867322514f8",
             "shasum": ""
         },
         "require": {
@@ -211,7 +211,7 @@
             "nesbot/carbon": "~1.0",
             "php": ">=5.3"
         },
-        "time": "2014-07-23 09:54:12",
+        "time": "2014-08-02 11:05:43",
         "type": "library",
         "installation-source": "dist",
         "notification-url": "https://packagist.org/downloads/",

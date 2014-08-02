@@ -1,32 +1,42 @@
-<ol class="sortable">
-	<li id="list_1"><div><span class="disclose"><span></span></span>Item 1</div>
-		<ol>
-			<li id="list_2"><div><span class="disclose"><span></span></span>Sub Item 1.1</div>
-				<ol>
-					<li id="list_3"><div><span class="disclose"><span></span></span>Sub Item 1.2</div>
-				</ol>
-		</ol>
-	<li id="list_4"><div><span class="disclose"><span></span></span>Item 2</div>
-	<li id="list_5"><div><span class="disclose"><span></span></span>Item 3</div>
-		<ol>
-			<li id="list_6" class="mjs-nestedSortable-no-nesting"><div><span class="disclose"><span></span></span>Sub Item 3.1 (no nesting)</div>
-			<li id="list_7"><div><span class="disclose"><span></span></span>Sub Item 3.2</div>
-				<ol>
-					<li id="list_8"><div><span class="disclose"><span></span></span>Sub Item 3.2.1</div>
-				</ol>
-		</ol>
-	<li id="list_9"><div><span class="disclose"><span></span></span>Item 4</div>
-	<li id="list_10"><div><span class="disclose"><span></span></span>Item 5</div>
-</ol>
+<div class="pdn20">
+	<h4>Startseite</h4>
+	
+	<ol class="page-list">
+		<li>
+			<div class="page-item">
+				<span class="page-item-title">{{$page->name}}</span>
+			</div>
+		</li>
+	</ol>
+	
+	<h4>Seiten</h4>
+	
+	<ol id="earth-pages" class="page-list">
+		{{CCView::create( 'Earth\\Pages::admin/page_list_item.view', array( 'page' => $page ) )}}
+	</ol>
+</div>
 <?php $theme->capture_append( 'js', function() { ?>
 <script>
 $(document).ready(function()
 {
-	$('.sortable').nestedSortable(
+	$('#earth-pages').nestedSortable(
 	{
 		handle: 'div',
 		items: 'li',
-		toleranceElement: '> div'
+		toleranceElement: '> div',
+		placeholder: 'page-item-placeholder',
+		tabSize: 25,
+		isTree: true,
+		expandOnHover: 700,
+		startCollapsed: true
+	});
+	
+	$(document).on('click', '.toggle-sub-pages', function( e ) 
+	{
+		e.preventDefault();
+		$(this).closest('li')
+			.toggleClass('page-item-collapsed')
+			.toggleClass('page-item-expanded');
 	});
 });
 </script>

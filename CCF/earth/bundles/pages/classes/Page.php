@@ -46,4 +46,24 @@ class Page extends \DB\Model
 		'created_at' => array( 'int', 0 ),
 		'modified_at' => array( 'int', 0 )
 	);
+	
+	/**
+	 * Recive subpages
+	 *
+	 * @return DB\Releation
+	 */
+	public function pages()
+	{
+		return $this->has_many( '\\Earth\\Pages\\Page', 'parent_id' );
+	}
+	
+	/**
+	 * Is this the root page
+	 *
+	 * @return bool
+	 */
+	public function is_root()
+	{
+		return $this->url === '/';
+	}
 }

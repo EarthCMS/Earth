@@ -33,5 +33,11 @@ class AdminController extends \Admin\Controller
 	public function action_index()
 	{
 		$this->view = \CCView::create( 'Earth\\Pages::admin/index.view' );
+		
+		$this->view->page = Page::with( 'pages', function( $q ) 
+		{
+			$q->where( 'url', '/' );
+			$q->limit(1);
+		});
 	}
 }
