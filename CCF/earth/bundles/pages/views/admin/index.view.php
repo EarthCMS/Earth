@@ -34,9 +34,31 @@ $(document).ready(function()
 	$(document).on('click', '.toggle-sub-pages', function( e ) 
 	{
 		e.preventDefault();
-		$(this).closest('li')
-			.toggleClass('page-item-collapsed')
-			.toggleClass('page-item-expanded');
+		
+		var $this = $(this),
+			container = $this.closest( 'li' ),
+			subitems = container.find( '> ol' );
+		
+		if ( container.hasClass( 'page-item-collapsed' ) )
+		{
+			subitems.css(
+			{
+				opacity: 1,
+				height: 'inherit',
+			});
+			container.removeClass( 'page-item-collapsed' );
+			$this.html( '<i class="el-icon-chevron-up"></i>' );
+		}
+		else
+		{
+			subitems.css(
+			{
+				opacity: 0,
+				height: '0px',
+			});
+			container.addClass( 'page-item-collapsed' );
+			$this.html( '<i class="el-icon-chevron-down"></i>' );	
+		}
 	});
 });
 </script>

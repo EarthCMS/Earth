@@ -424,6 +424,8 @@ table.table-ccd {
 		list-style: none;
 		margin-left: 20px;
 		padding: 0;
+		.transition( all ease-in-out 0.3s );
+		visibility: visible;
 		
 		div.page-item, .page-item-placeholder {
 			background-color: darken( #D0D8DD, 4% );
@@ -435,21 +437,21 @@ table.table-ccd {
 		
 	}
 	
-	.page-item-collapsed > ol {
-		display: none;
-		
-		
-	}
-	.page-item-expanded > ol {
-		display: block;
-	}
-	
-	.page-item-expanded .toggle-sub-pages:before {
-		content: '-';
+	div.page-item {
+		.toggle-sub-pages {
+			color: #A7AEB2;
+			font-size: 14px;
+			display: block;
+			float: left;
+			margin-right: 15px;
+			margin-top: 0px;
+		}
 	}
 	
-	.page-item-collapsed .toggle-sub-pages:before {
-		content: '+';
+	.page-item-container.page-item-collapsed > ol {
+		height: 0px;
+		opacity: 0;
+		visibility: hidden;
 	}
 	
 	div.page-item, .page-item-placeholder {
