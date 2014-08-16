@@ -57,6 +57,7 @@ Admin\Registry::add( 'pages', function( $module )
 	$module->title = __('Earth\\Pages::controller/admin.topic');
 	$module->controller = 'Earth\\Pages::Admin';
 	$module->icon = "el-icon-th-list";
+	$module->sidebar = "Earth\\Pages::sidebar/pages.view";
 });
 
 

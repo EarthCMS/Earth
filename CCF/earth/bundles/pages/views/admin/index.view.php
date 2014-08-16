@@ -19,7 +19,9 @@
 <script>
 $(document).ready(function()
 {
-	$('#earth-pages').nestedSortable(
+	var pages_container = $('#earth-pages');
+	
+	pages_container.nestedSortable(
 	{
 		handle: 'div',
 		items: 'li',
@@ -28,9 +30,37 @@ $(document).ready(function()
 		tabSize: 25,
 		isTree: true,
 		expandOnHover: 700,
-		startCollapsed: true
+		startCollapsed: true,
 	});
 	
+	/*
+	 * Save the pages order and structure
+	 */
+	$(document).on( 'click', '#pages-save-order-trigger', function( e ) {
+		e.preventDefault();
+		
+		CC.UI.loading( pages_container );
+		
+		$.ajax( {
+			url: '{{CCUrl::action('tree')}}',
+			type: "POST",
+			data: 
+			{
+				order: JSON.stringify( pages_container.nestedSortable( 'toArray' ) ),
+			},
+			success: function( res ) 
+			{
+				pages_container.html( res );
+				
+				// disable loading
+				CC.UI.loading( pages_container );
+			},
+		});
+	});
+	
+	/*
+	 * Toggle sub pages
+	 */
 	$(document).on('click', '.toggle-sub-pages', function( e ) 
 	{
 		e.preventDefault();

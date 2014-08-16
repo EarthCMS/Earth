@@ -100,7 +100,8 @@ class Page extends \DB\Model
 	 */
 	public function pages()
 	{
-		return $this->has_many( '\\Earth\\Pages\\Page', 'parent_id' );
+		return $this->has_many( '\\Earth\\Pages\\Page', 'parent_id' )
+			->order_by( 'sequence' );
 	}
 	
 	/**

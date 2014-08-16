@@ -32,7 +32,16 @@ class AdminController extends \Admin\Controller
 	 */
 	public function action_index()
 	{
+		$this->theme->content_topic = __( ':action.topic' );
+		
 		$this->view = \CCView::create( 'Earth\\Pages::admin/index.view' );
+		
+		// add a save button to the header bar
+		$this->theme->content_header[] = \UI\HTML::a( '<i class="el-icon-ok-circle"></i> '.
+			__( 'Earth::common.save' ) )
+			->class( 'btn btn-success' )
+			->id( 'pages-save-order-trigger' );
+			//->disabled( true );
 		
 		$this->view->page = Page::with( 'pages', function( $q ) 
 		{
@@ -96,5 +105,72 @@ class AdminController extends \Admin\Controller
 		
 		// now just forward the change type action
 		return \CCRedirect::action( 'edit', array( 'r' => $page->id ) );
+	}
+	
+	/**
+	 * tree action
+	 * 
+	 * @return void|CCResponse
+	 */
+	public function action_tree()
+	{
+		// we just deliver content in this action
+		$this->modal = true;
+		
+		// get the root page
+		$page = Page::with( 'pages', function( $q ) 
+		{
+			$q->where( 'url', '/' );
+			$q->limit(1);
+		});
+		
+		// on post try to save all the recived data
+		if ( \CCIn::method( 'post' ) )
+		{
+			$pages = Page::find();
+			
+			$order = json_decode( \CCIn::post( 'order' ), true );
+			
+			foreach( $order as $key => $order_data )
+			{
+				// if there is a page
+				if ( isset( $pages[$order_data['item_id']] ) )
+				{
+					$page = $pages[$order_data['item_id']];
+					$something_changed = false;
+					
+					// assign the new sequence
+					if ( $page->sequence != $key )
+					{
+						$page->sequence = $key;
+						$something_changed = true;
+					}
+					
+					// set new parent
+					if ( $order_data['parent_id'] < 1 )
+					{
+						$order_data['parent_id'] = 1;
+					}
+					
+					if ( isset( $pages[$order_data['parent_id']] ) )
+					{
+						if ( $page->parent_id != $order_data['parent_id'] )
+						{
+							$page->parent_id = $order_data['parent_id'];
+							$something_changed = true;
+						}
+					}
+					
+					// save if something has changed
+					if ( $something_changed )
+					{
+						$page->save( array( 'parent_id', 'sequence' ) );
+					}
+				}
+			}
+		}
+		
+		return \CCView::create( 'Earth\\Pages::admin/page_list_item.view', array( 'page' => $page ) )
+			->render();
 	}
 }
