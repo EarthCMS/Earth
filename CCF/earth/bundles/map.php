@@ -48,6 +48,9 @@ Admin\Registry::add( 'users', function( $module )
  */
 CCFinder::bundle( 'Earth\\Pages', CCFPATH.'earth/bundles/pages/' );
 
+// register the earth router
+CCEvent::mind( 'ccf.router.resolve.after', array( '\\Earth\\Pages\\Router', 'resolve' ) );
+
 // register the admin module
 Admin\Registry::add( 'pages', function( $module ) 
 {
