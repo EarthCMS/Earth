@@ -117,13 +117,6 @@ class AdminController extends \Admin\Controller
 		// we just deliver content in this action
 		$this->modal = true;
 		
-		// get the root page
-		$page = Page::with( 'pages', function( $q ) 
-		{
-			$q->where( 'url', '/' );
-			$q->limit(1);
-		});
-		
 		// on post try to save all the recived data
 		if ( \CCIn::method( 'post' ) )
 		{
@@ -164,11 +157,39 @@ class AdminController extends \Admin\Controller
 					// save if something has changed
 					if ( $something_changed )
 					{
-						$page->save( array( 'parent_id', 'sequence' ) );
+						$page->save( array( 'parent_id', 'sequence', 'url', 'full_url' ) );
 					}
 				}
 			}
 		}
+		
+		// get the root page
+		$page = Page::with( 'pages', function( $q ) 
+		{
+			$q->where( 'url', '/' );
+			$q->limit(1);
+		});
+		
+		return \CCView::create( 'Earth\\Pages::admin/page_list_item.view', array( 'page' => $page ) )
+			->render();
+	}
+	
+	
+	/**
+	 * create item action
+	 * 
+	 * @return void|CCResponse
+	 */
+	public function action_create()
+	{
+		// we just deliver content in this action
+		$this->modal = true;
+		
+		// create new page item
+		$page = new Page;
+		$page->save();
+		$page->name = 'New page #'.$page->id;
+		$page->save( 'name' );
 		
 		return \CCView::create( 'Earth\\Pages::admin/page_list_item.view', array( 'page' => $page ) )
 			->render();

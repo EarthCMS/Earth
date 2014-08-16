@@ -59,6 +59,26 @@ $(document).ready(function()
 	});
 	
 	/*
+	 * Create new pages item
+	 */
+	$(document).on( 'click', '.create-new-page-item-trigger', function( e ) {
+		e.preventDefault();
+		
+		CC.UI.loading( pages_container );
+		
+		$.ajax( {
+			url: '{{CCUrl::action('create')}}',
+			success: function( res ) 
+			{
+				pages_container.append( res );
+				
+				// disable loading
+				CC.UI.loading( pages_container );
+			},
+		});
+	});
+	
+	/*
 	 * Toggle sub pages
 	 */
 	$(document).on('click', '.toggle-sub-pages', function( e ) 

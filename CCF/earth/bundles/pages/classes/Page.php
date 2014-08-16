@@ -35,7 +35,7 @@ class Page extends \DB\Model
 		'status' => array( 'bool', false ),
 		'hidden' => array( 'bool', false ),
 		'sequence' => array( 'int', 0 ),
-		'parent_id' => array( 'int', 0 ),
+		'parent_id' => array( 'int', 1 ),
 		'url' => array( 'string', '' ),
 		'full_url' => array( 'string', '' ),
 		'name' => array( 'string', '' ),
@@ -105,6 +105,16 @@ class Page extends \DB\Model
 	}
 	
 	/**
+	 * Recive parent
+	 *
+	 * @return DB\Releation
+	 */
+	public function parent()
+	{
+		return $this->belongs_to( '\\Earth\\Pages\\Page', 'id', 'parent_id' );
+	}
+	
+	/**
 	 * Is this the root page
 	 *
 	 * @return bool
@@ -112,5 +122,39 @@ class Page extends \DB\Model
 	public function is_root()
 	{
 		return $this->url === '/';
+	}
+	
+	/**
+	 * Before saving we set empty urls and fix the full url 
+	 *
+	 * @param array 			$data
+	 * @return $data
+	 */
+	protected function _before_save( $data ) 
+	{
+		// check if the url has to be fixed
+		if ( empty( $data['url'] ) )
+		{
+			$data['url'] = \CCStr::clean_url( $this->name );
+		}
+		
+		// updated full url
+		if ( !$this->is_root() )
+		{
+			$data['full_url'] = trim( $this->parent->full_url.'/'.$data['url'], '/' );
+		}
+		
+		return $data; 
+	}
+	
+	/**
+	 * After saving we have to update the children
+	 *
+	 * @param array 			$data
+	 * @return $data
+	 */
+	protected function _after_save() 
+	{
+		
 	}
 }
