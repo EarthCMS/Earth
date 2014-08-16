@@ -63,6 +63,27 @@ class AdminController extends \Admin\Controller
 			$page = new Page;
 		}
 		
+		if ( \CCIn::method( 'post' ) )
+		{
+			// forward to type specifc save function
+			$response = call_user_func_array( array( $this, 'handle_'.$page->type.'_save' ), array( &$page ) );
+			
+			// if response is not true
+			if ( $response === true )
+			{
+				$page->save();
+				\UI\Alert::add( 'success', __( 'Earth::message.success.save' ) );
+			}
+			elseif ( is_array( $response ) )
+			{
+				\UI\Alert::add( 'danger', $response );
+			}
+			else
+			{
+				\UI\Alert::add( 'danger', __('Earth::message.failure.save') );
+			}
+		}
+		
 		// create the detail view
 		$view = \CCView::create( 'Earth\\Pages::admin/detail.view', array(
 		
@@ -70,14 +91,31 @@ class AdminController extends \Admin\Controller
 			'page' => $page,
 			
 			// assign the type specific edit subview
-			'edit_view' => \CCView::create( 'Earth\\Pages::admin/detail/'.$page->type.'.view' ),
+			'edit_view' => \CCView::create( 'Earth\\Pages::admin/detail/'.$page->type.'.view', array(
+			
+				// we need the page also in the edit view
+				'page' => $page,
+			)),
 		));
 		
 		// return panel view
 		return \Admin\Panel::create( $view->render() )
 			->topic( ( $page->id > 0 ) ? $page->name : __(':action.new') )
-			->header( 'save', '#user-detail-form' )
+			->header( 'save', '#page-detail-form' )
 			->response();
+	}
+	
+	/**
+	 * Handle Controller save
+	 *
+	 * @param Page			$page
+	 * @return bool|array
+	 */
+	public function handle_controller_save( $page )
+	{
+		$page->controller = trim( \CCIn::post( 'controller' ) );
+		
+		return true;
 	}
 	
 	/**

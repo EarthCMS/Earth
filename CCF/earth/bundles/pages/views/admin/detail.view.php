@@ -6,5 +6,8 @@
 {% endeach %}
 </ul>
 <div class="page-detail-edit pdn15">
-	{{$edit_view}}
+	{{UI\Form::start( 'page-detail', array( 'method' => 'post', 'class' => 'panel-form', action => CCUrl::action( 'edit' ) ) )}}
+		{{$edit_view}}
+		{{UI\Form::input( 'r', $page->id, 'hidden' )}}
+	{{UI\Form::end()}}
 </div>

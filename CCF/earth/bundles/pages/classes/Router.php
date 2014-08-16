@@ -60,13 +60,13 @@ class Router
 		}
 		
 		// does this page implement an controller
-		if ( !empty( $page->controller ) )
+		if ( $page->type === 'controller' )
 		{
 			// create the controller
 			$controller = \CCController::create( $page->controller );
 		}
 		// else we use the page controller
-		elseif ( !empty( $page->redirect ) )
+		elseif ( $page->type === 'redirect' )
 		{
 			return array( function() use( $page )
 			{
