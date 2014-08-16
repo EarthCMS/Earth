@@ -127,7 +127,7 @@ ul.ccd-icon-nav {
 			}
 		}
 		
-		a{
+		a {
 			display: block;
 			.square(60px);
 			float: left;
@@ -136,14 +136,15 @@ ul.ccd-icon-nav {
 			// icons
 			i.icon {
 			 	display: block;
-				font-size: 26px;
+				font-size: 20px;
 				color: #ccc;
-				margin: 16px;
+				margin: 20px;
 			}	
 			
 			.icon-nav-label {
 				.transition( all ease-in-out 0.2s );
 				padding: 0 20px 0px 10px;
+				left: 0;
 				position: absolute;
 				display: block;
 				opacity: 0;
@@ -428,11 +429,11 @@ table.table-ccd {
 		visibility: visible;
 		
 		div.page-item, .page-item-placeholder {
-			background-color: darken( #D0D8DD, 4% );
+			background-color: lighten( #3F3F3F, 4% );
 		}
 		
 		ol div.page-item, .page-item-placeholder {
-			background-color: darken( #D0D8DD, 6% );
+			background-color: lighten( #3F3F3F, 6% );
 		}
 		
 	}
@@ -443,7 +444,7 @@ table.table-ccd {
 			font-size: 14px;
 			display: block;
 			float: left;
-			margin-right: 15px;
+			margin-right: 7px;
 			margin-top: 0px;
 		}
 	}
@@ -455,16 +456,31 @@ table.table-ccd {
 	}
 	
 	div.page-item, .page-item-placeholder {
-		background-color: #D0D8DD;
+		background-color: #3F3F3F;
 		color: #fff;
-		text-shadow: 0 -1px #C4C4C4;
 		display: block;
-		padding: 10px 20px;
+		padding: 6px 10px;
+		padding-right: 0;
 		margin-bottom: 2px;
 		.border-radius(2px);
 		
 		.page-item-title {
-			text-transform: uppercase;
+			
+		}
+		
+		.page-item-url, .page-item-type {
+			font-size: 10px;
+			color: #ccc;
+		}
+		
+		.page-item-type {
+			color: #aaa;
+		}
+		
+		&:hover {
+			.page-item-action {
+				opacity: 1;
+			}
 		}
 	}
 	
@@ -472,5 +488,21 @@ table.table-ccd {
 		background-color: #dbdbdb !important;
 		border: 2px dashed #ccc;
 		height: 40px;
+	}
+	
+	.page-item-action {
+		opacity: 0.3;
+		font-size: 13px;
+		padding: 1px 7px;
+		line-height: 19px;
+		margin-left: 3px;
+		color: #a7aeb2;
+		float: right;
+		border-left: 1px solid #646464;
+		display: block;
+		
+		&:hover {
+			color: #fff;
+		}
 	}
 }
