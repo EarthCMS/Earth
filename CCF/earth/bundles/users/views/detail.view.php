@@ -1,3 +1,4 @@
+<div class="pdn15">
 {% use UI\Form; %}
 {{Form::start( 'user-detail', array( 'method' => 'post', 'class' => 'panel-form', action => CCUrl::action( 'edit' ) ) )}}
 <div class="row">
@@ -42,3 +43,4 @@
 	</div>
 </div>
 {{Form::end()}}
+</div>
