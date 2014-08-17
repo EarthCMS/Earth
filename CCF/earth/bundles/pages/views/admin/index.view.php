@@ -23,14 +23,28 @@ $(document).ready(function()
 	
 	pages_container.nestedSortable(
 	{
-		handle: 'div',
+		forcePlaceholderSize: true,
+		handle: 'div.page-item',
+		helper:	'clone',
 		items: 'li',
-		toleranceElement: '> div',
+		opacity: .6,
 		placeholder: 'page-item-placeholder',
-		tabSize: 25,
+		revert: 250,
+		tabSize: 20,
+		tolerance: 'pointer',
+		toleranceElement: '> div',
+		
 		isTree: true,
 		expandOnHover: 700,
 		startCollapsed: true,
+		
+		branchClass: 'page-item-branch',
+		collapsedClass: 'page-item-collapsed',
+		disableNestingClass: 'page-item-no-nesting',
+		errorClass: 'page-item-error',
+		expandedClass: 'page-item-expanded',
+		hoveringClass: 'page-item-hovering',
+		leafClass: 'page-item-leaf'
 	});
 	
 	/*
@@ -91,23 +105,13 @@ $(document).ready(function()
 		
 		if ( container.hasClass( 'page-item-collapsed' ) )
 		{
-			subitems.css(
-			{
-				opacity: 1,
-				height: 'inherit',
-			});
 			container.removeClass( 'page-item-collapsed' );
-			$this.html( '<i class="el-icon-chevron-up"></i>' );
+			container.addClass( 'page-item-expanded' );
 		}
 		else
 		{
-			subitems.css(
-			{
-				opacity: 0,
-				height: '0px',
-			});
 			container.addClass( 'page-item-collapsed' );
-			$this.html( '<i class="el-icon-chevron-down"></i>' );	
+			container.removeClass( 'page-item-expanded' );
 		}
 	});
 });

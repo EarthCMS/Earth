@@ -10,9 +10,7 @@
 			<i style="font-size: 16px;" class="el-icon-screen"></i>
 		</a>
 		
-		<a href="#" class="toggle-sub-pages">
-			<i class="el-icon-chevron-down"></i>
-		</a>
+		<a href="#" class="toggle-sub-pages"></a>
 		<span class="page-item-title">{{$page->name}}</span>
 		<span class="page-item-type">{{$page->type}} - </span>
 		<span class="page-item-url">{{$page->full_url}}</span>

@@ -438,22 +438,57 @@ table.table-ccd {
 		
 	}
 	
-	div.page-item {
-		.toggle-sub-pages {
-			color: #A7AEB2;
-			font-size: 14px;
-			display: block;
-			float: left;
-			margin-right: 7px;
-			margin-top: 0px;
+	li {
+		
+		.page-item {
+		
+			
+			.toggle-sub-pages {
+				color: #A7AEB2;
+				font-size: 14px;
+				display: block;
+				float: left;
+				margin-right: 7px;
+				margin-top: 0px;
+				
+				font-family: 'Elusive-Icons';
+				speak: none;
+				font-style: normal;
+				font-weight: normal;
+				font-variant: normal;
+				text-transform: none;
+				line-height: 1;
+				
+				/* Better Font Rendering =========== */
+				-webkit-font-smoothing: antialiased;
+				-moz-osx-font-smoothing: grayscale;
+				
+				&:before {
+					content: "\e6fe";
+				}
+			}
 		}
+		
+		&.page-item-collapsed > ol {
+			display: none;
+		}
+		
+		// toggle the icon on expanded
+		&.page-item-expanded > .page-item {
+			.toggle-sub-pages {
+				&:before {
+					content: "\e6fb";
+				}
+			}
+		}
+		
+		&.page-item-hovering.page-item-collapsed > .page-item {
+			opacity: 0.8;
+		}
+		
 	}
 	
-	.page-item-container.page-item-collapsed > ol {
-		height: 0px;
-		opacity: 0;
-		visibility: hidden;
-	}
+	
 	
 	div.page-item, .page-item-placeholder {
 		background-color: #3F3F3F;
