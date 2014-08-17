@@ -32,7 +32,7 @@ class Page extends \DB\Model
 	protected static $_defaults = array(
 		'id',
 		'type' => 1, 
-		'status' => array( 'bool', false ),
+		'status' => array( 'bool', true ),
 		'hidden' => array( 'bool', false ),
 		'sequence' => array( 'int', 0 ),
 		'parent_id' => array( 'int', 1 ),
