@@ -61,6 +61,13 @@ class Page extends \DB\Model
 	);
 	
 	/**
+	 * Save the inital name to be able to know when to update the url
+	 *
+	 * @var string
+	 */
+	protected static $initial_name = null;
+	
+	/**
 	 * Return the type always as string
 	 *
 	 * @param int 			$type
@@ -91,6 +98,23 @@ class Page extends \DB\Model
 		}
 		
 		return \CCArr::get( $type, array_flip( static::$_types ) );
+	}
+	
+	/**
+	 * Clean the url before setting
+	 *
+	 * @param string 			$type
+	 * @return void
+	 */
+	protected function _set_modifier_url( $url )
+	{
+		// if the url is empty use the name
+		if ( empty( $url ) )
+		{
+			$url = $this->name;
+		}
+		
+		return \CCStr::clean_url( $url );
 	}
 	
 	/**
@@ -125,6 +149,23 @@ class Page extends \DB\Model
 	}
 	
 	/**
+	 * Before assign
+	 *
+	 * @param array 			$data
+	 * @return $data
+	 */
+	protected function _before_assign( $data ) 
+	{
+		// check if the name and the url matches
+		if ( isset( $data['name'] ) )
+		{
+			$this->initial_name = $data['name'];
+		}
+		
+		return $data;
+	}
+	
+	/**
 	 * Before saving we set empty urls and fix the full url 
 	 *
 	 * @param array 			$data
@@ -132,12 +173,15 @@ class Page extends \DB\Model
 	 */
 	protected function _before_save( $data ) 
 	{
-		// check if the url has to be fixed
-		if ( empty( $data['url'] ) )
+		// while the url is matching the name keep updating the url
+		if ( isset( $data['name'] ) && isset( $data['url'] ) )
 		{
-			$data['url'] = \CCStr::clean_url( $this->name );
+			if ( $this->initial_name !== $data['name'] && \CCStr::clean_url( $this->initial_name ) === $data['url'] )
+			{
+				$this->url = $data['url'] = \CCStr::clean_url( $data['name'] );
+			}
 		}
-		
+				
 		// updated full url
 		if ( !$this->is_root() )
 		{

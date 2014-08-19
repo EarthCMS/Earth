@@ -65,22 +65,37 @@ class AdminController extends \Admin\Controller
 		
 		if ( \CCIn::method( 'post' ) )
 		{
+			// Create validator
+			$validator = \CCValidator::post();
+			
+			// assign base form
+			$page->strict_assign( array(
+				'hidden',
+				'status',
+				'name',
+				'url'
+			), \CCIn::all( 'post' ));
+			
+			// validate the base form elements such as status, name etc.
+			$validator->rules( 'name', 'required', 'min:1' );
+			
+			// because the url has a modifier we have to pass 
+			// the modified string to the validator
+			$validator->set( 'url', $page->url );
+			$validator->rules( 'url', 'required', 'min:1' );
+			
 			// forward to type specifc save function
-			$response = call_user_func_array( array( $this, 'handle_'.$page->type.'_save' ), array( &$page ) );
+			$response = call_user_func_array( array( $this, 'handle_'.$page->type.'_save' ), array( &$page, $validator ) );
 			
 			// if response is not true
-			if ( $response === true )
+			if ( $validator->success() )
 			{
 				$page->save();
 				\UI\Alert::add( 'success', __( 'Earth::message.success.save' ) );
 			}
-			elseif ( is_array( $response ) )
-			{
-				\UI\Alert::add( 'danger', $response );
-			}
 			else
 			{
-				\UI\Alert::add( 'danger', __('Earth::message.failure.save') );
+				\UI\Alert::add( 'danger', $validator->errors() );
 			}
 		}
 		
@@ -115,6 +130,28 @@ class AdminController extends \Admin\Controller
 	{
 		$page->controller = trim( \CCIn::post( 'controller' ) );
 		
+		return true;
+	}
+	
+	/**
+	 * Handle Controller save
+	 *
+	 * @param Page			$page
+	 * @return bool|array
+	 */
+	public function handle_content_save( $page )
+	{
+		return true;
+	}
+	
+	/**
+	 * Handle Controller save
+	 *
+	 * @param Page			$page
+	 * @return bool|array
+	 */
+	public function handle_redirect_save( $page )
+	{
 		return true;
 	}
 	
