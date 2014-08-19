@@ -10,9 +10,11 @@
 	{{Form::start( 'page-detail', array( 'method' => 'post', 'class' => 'panel-form form-horizontal', action => CCUrl::action( 'edit' ) ) )}}
 		<div class="form-group">
 			<div class="col-sm-6">
+				{{Form::input('status', '0', 'hidden')}}
 				{{Form::checkbox('status', __('Earth\\Pages::model/page.status'), $page->status)}}
 			</div>
 			<div class="col-sm-6">
+				{{Form::input('hidden', '0', 'hidden')}}
 				{{Form::checkbox('hidden', __('Earth\\Pages::model/page.hidden'), $page->hidden)}}
 			</div>
 		</div>

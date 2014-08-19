@@ -65,7 +65,14 @@ class Page extends \DB\Model
 	 *
 	 * @var string
 	 */
-	protected static $initial_name = null;
+	public $initial_name = null;
+	
+	/**
+	 * Save the inital url so that we can check if we have to update the children
+	 *
+	 * @var string
+	 */
+	public $initial_url = null;
 	
 	/**
 	 * Return the type always as string
@@ -162,6 +169,12 @@ class Page extends \DB\Model
 			$this->initial_name = $data['name'];
 		}
 		
+		// save the inital url also
+		if ( isset( $data['full_url'] ) )
+		{
+			$this->initial_url = $data['full_url'];
+		}
+		
 		return $data;
 	}
 	
@@ -185,7 +198,7 @@ class Page extends \DB\Model
 		// updated full url
 		if ( !$this->is_root() )
 		{
-			$data['full_url'] = trim( $this->parent->full_url.'/'.$data['url'], '/' );
+			$data['full_url'] = $this->full_url = trim( $this->parent->full_url.'/'.$data['url'], '/' );
 		}
 		
 		return $data; 
@@ -199,6 +212,12 @@ class Page extends \DB\Model
 	 */
 	protected function _after_save() 
 	{
-		
+		if ( $this->full_url !== $this->initial_url )
+		{
+			foreach( $this->pages as $page )
+			{
+				$page->save();
+			}
+		}
 	}
 }
