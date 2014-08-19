@@ -70,7 +70,7 @@ class Router
 		{
 			return array( function() use( $page )
 			{
-				return CCRedirect::to( $page->redirect );
+				return \CCRedirect::to( $page->redirect );
 			}, true );
 		}
 		

@@ -85,7 +85,7 @@ class AdminController extends \Admin\Controller
 			$validator->rules( 'url', 'required', 'min:1' );
 			
 			// forward to type specifc save function
-			$response = call_user_func_array( array( $this, 'handle_'.$page->type.'_save' ), array( &$page, $validator ) );
+			$response = call_user_func_array( array( $this, 'handle_'.$page->type.'_save' ), array( &$page, &$validator ) );
 			
 			// if response is not true
 			if ( $validator->success() )
@@ -123,35 +123,42 @@ class AdminController extends \Admin\Controller
 	/**
 	 * Handle Controller save
 	 *
-	 * @param Page			$page
+	 * @param Page				$page
+	 * @param CCValidator		$validator
 	 * @return bool|array
 	 */
-	public function handle_controller_save( $page )
+	public function handle_content_save( $page, $validator )
+	{
+		return true;
+	}
+	
+	
+	/**
+	 * Handle Controller save
+	 *
+	 * @param Page				$page
+	 * @param CCValidator		$validator
+	 * @return bool|array
+	 */
+	public function handle_controller_save( $page, $validator )
 	{
 		$page->controller = trim( \CCIn::post( 'controller' ) );
 		
 		return true;
 	}
 	
-	/**
-	 * Handle Controller save
-	 *
-	 * @param Page			$page
-	 * @return bool|array
-	 */
-	public function handle_content_save( $page )
-	{
-		return true;
-	}
 	
 	/**
 	 * Handle Controller save
 	 *
-	 * @param Page			$page
+	 * @param Page				$page
+	 * @param CCValidator		$validator
 	 * @return bool|array
 	 */
-	public function handle_redirect_save( $page )
+	public function handle_redirect_save( $page, $validator )
 	{
+		$page->redirect = trim( \CCIn::post( 'redirect' ) );
+		
 		return true;
 	}
 	
