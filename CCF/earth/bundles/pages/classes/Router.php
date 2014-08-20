@@ -36,7 +36,7 @@ class Router
 		
 		if ( $page = Page::find( 'full_url', $uri ) )
 		{
-			return static::handle_page( $route, $page, $action );
+			return static::handle_page( $route, $page );
 		}
 		
 		// otherwise return false
@@ -48,10 +48,9 @@ class Router
 	 *
 	 * @param CCRoute			$route
 	 * @param Page 				$page
-	 * @param string				$action
 	 * @return bool|array
 	 */
-	private static function handle_page( $route, $page, $action = null )
+	private static function handle_page( $route, $page )
 	{
 		// is the page active?
 		if ( $page->status !== true )
@@ -73,7 +72,13 @@ class Router
 				return \CCRedirect::to( $page->redirect );
 			}, true );
 		}
+		else 
+		{
+			$controller = \CCController::create( 'Earth\\Pages::Content' );
+		}
 		
+		// add the current page as first param to the controller
+		array_unshift( $route->params, $page );
 		
 		// set the route callback to the controller execute
 		$route->callback = array( $controller, 'execute' );

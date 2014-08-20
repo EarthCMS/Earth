@@ -1,5 +1,9 @@
 {% if !$page->is_root() %}
-<li class="page-item-collapsed page-item-container" id="page-item-{{$page->id}}">
+<li 
+	class="{{ $page->is_expanded() ? 'page-item-expanded' : 'page-item-collapsed' }} page-item-container" 
+	id="page-item-{{$page->id}}" 
+	data-page-id="{{$page->id}}"
+>
 	<div class="page-item">
 		
 		<a href="{{CCUrl::action( 'edit', array( 'r' => $page->id ) )}}" class="panel-ajax-trigger page-item-action">

@@ -276,4 +276,23 @@ class AdminController extends \Admin\Controller
 		return \CCView::create( 'Earth\\Pages::admin/page_list_item.view', array( 'page' => $page ) )
 			->render();
 	}
+	
+	/**
+	 * save the item collapsed or expanded status
+	 * 
+	 * @return void|CCResponse
+	 */
+	public function action_save_tree_status()
+	{
+		// we just deliver content in this action
+		$this->modal = true;
+		
+		// recive the page
+		if ( !$page = Page::find( \CCIn::get( 'r', \CCIn::post( 'r', 0 ) ) ) )
+		{
+			return \CCResponse::error(404);
+		}
+		
+		\CCSession::set( 'earth.pages.page-'.$page->id.'.expanded', \CCIn::get('collapsed') === "true" ? false : true );
+	}
 }

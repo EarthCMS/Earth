@@ -156,6 +156,16 @@ class Page extends \DB\Model
 	}
 	
 	/**
+	 * Is the current page collapsed for the current admin?
+	 *
+	 * @return bool
+	 */
+	public function is_expanded()
+	{
+		return \CCSession::get( 'earth.pages.page-'.$this->id.'.expanded', false );
+	}
+	
+	/**
 	 * Before assign
 	 *
 	 * @param array 			$data

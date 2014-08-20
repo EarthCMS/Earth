@@ -102,6 +102,15 @@ $(document).ready(function()
 		var $this = $(this),
 			container = $this.closest( 'li' ),
 			subitems = container.find( '> ol' );
+			
+		// save the collapsed or expanded server on the user
+		$.ajax( {
+			url: '{{CCUrl::action('save_tree_status')}}',
+			data: {
+				"r": container.data('page-id'),
+				"collapsed": !container.hasClass( 'page-item-collapsed' ),
+			},
+		});
 		
 		if ( container.hasClass( 'page-item-collapsed' ) )
 		{
