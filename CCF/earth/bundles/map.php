@@ -60,6 +60,14 @@ Admin\Registry::add( 'pages', function( $module )
 	$module->sidebar = "Earth\\Pages::sidebar/pages.view";
 });
 
+/*
+ *---------------------------------------------------------------
+ * Editor Bundle
+ *---------------------------------------------------------------
+ * 
+ * Text editor
+ */
+CCFinder::bundle( 'Earth\\Editor', CCFPATH.'earth/bundles/editor/' );
 
 /*
  *---------------------------------------------------------------

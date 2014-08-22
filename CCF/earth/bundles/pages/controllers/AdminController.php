@@ -57,12 +57,15 @@ class AdminController extends \Admin\Controller
 	 */
 	public function action_edit()
 	{
-		// recive the user
+		// recive the page object if no record is found
+		// just create a empty one
 		if ( !$page = Page::find( \CCIn::get( 'r', \CCIn::post( 'r', 0 ) ) ) )
 		{
 			$page = new Page;
 		}
 		
+		// Check if this is a post request, if it is so 
+		// handle the recived data and save the page record
 		if ( \CCIn::method( 'post' ) )
 		{
 			// Create validator
@@ -99,7 +102,7 @@ class AdminController extends \Admin\Controller
 			}
 		}
 		
-		// create the detail view
+		// create the detail view for the panel response
 		$view = \CCView::create( 'Earth\\Pages::admin/detail.view', array(
 		
 			// assign the page model
@@ -113,11 +116,29 @@ class AdminController extends \Admin\Controller
 			)),
 		));
 		
+		// run the prepare edit view for mehtod for the page type
+		call_user_func_array( array( $this, 'prepare_'.$page->type.'_view' ), array( &$view ) );
+		
 		// return panel view
 		return \Admin\Panel::create( $view->render() )
 			->topic( ( $page->id > 0 ) ? $page->name : __(':action.new') )
 			->header( 'save', '#page-detail-form' )
 			->response();
+	}
+	
+	/**
+	 * Prepare the content view
+	 *
+	 * @param CCView			$view
+	 * @return void
+	 */
+	public function prepare_content_view( $view )
+	{
+		$view->edit_view->editor = \Earth\Editor\Manager::create()
+			->editor( 'content' )
+			->content( 'Habibi <b>Sulfat</b>' )
+			->view()
+			->render();
 	}
 	
 	/**
@@ -131,7 +152,6 @@ class AdminController extends \Admin\Controller
 	{
 		return true;
 	}
-	
 	
 	/**
 	 * Handle Controller save
