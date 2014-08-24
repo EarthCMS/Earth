@@ -43,8 +43,10 @@ class Page extends \DB\Model
 		'image' => array( 'string', '' ),
 		'controller' => array( 'string', '' ),
 		'redirect' => array( 'string', '' ),
-		'modules' => array( 'string', '' ),
-		'options' => array( 'string', '' ),
+		'content' => array( 'string', '' ),
+		'content_build' => array( 'string', '' ),
+		'modules' => array( 'json', array() ),
+		'options' => array( 'json', array() ),
 		'created_at' => array( 'int', 0 ),
 		'modified_at' => array( 'int', 0 )
 	);
@@ -122,6 +124,33 @@ class Page extends \DB\Model
 		}
 		
 		return \CCStr::clean_url( $url );
+	}
+	
+	/**
+	 * Build content when its set
+	 *
+	 * @param string 			$content
+	 * @return void
+	 */
+	protected function _set_modifier_content( $content )
+	{
+		// rebuild content only if something has changed
+		if ( $this->content !== $content )
+		{
+			$this->content_build = \Earth\Editor\Content::build( $content );
+		}		
+		
+		return $content;
+	}
+	
+	/**
+	 * Returns the builded and formatted content
+	 *
+	 * @return string
+	 */
+	public function content()
+	{
+		return $this->content_build;
 	}
 	
 	/**

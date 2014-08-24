@@ -19,7 +19,7 @@ class ContentController extends \CCViewController
 		// In the page controller the theme topic is always the page name
 		$this->theme->topic = $page->name;
 		
-		echo $page->name;
+		echo $page->content();
 	}
 	
 	/**

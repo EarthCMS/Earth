@@ -136,7 +136,8 @@ class AdminController extends \Admin\Controller
 	{
 		$view->edit_view->editor = \Earth\Editor\Manager::create()
 			->editor( 'content' )
-			->content( 'Habibi <b>Sulfat</b>' )
+			->content( $view->page->content )
+			->modal( true )
 			->view()
 			->render();
 	}
@@ -150,6 +151,8 @@ class AdminController extends \Admin\Controller
 	 */
 	public function handle_content_save( $page, $validator )
 	{
+		$page->content = \CCIn::post( 'content' );
+		
 		return true;
 	}
 	

@@ -69,6 +69,9 @@ Admin\Registry::add( 'pages', function( $module )
  */
 CCFinder::bundle( 'Earth\\Editor', CCFPATH.'earth/bundles/editor/' );
 
+// set the current editor from configuration
+Earth\Editor\Manager::set_editor( 'markdown' );
+
 /*
  *---------------------------------------------------------------
  * Prepare all admin modules

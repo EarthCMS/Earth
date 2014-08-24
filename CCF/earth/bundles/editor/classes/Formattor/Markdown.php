@@ -1,6 +1,6 @@
 <?php namespace Earth\Editor;
 /**
- * Formattor
+ * Formattor_Interface
  **
  * 
  * @package       Earth
@@ -8,7 +8,7 @@
  * @version       1.0.0
  * @copyright     2010 - 2014 ClanCats GmbH
  */
-class Formattor implements Formattor_Interface 
+class Formattor_Markdown implements Formattor_Interface 
 {
 	/**
 	 * Build the content
@@ -18,6 +18,7 @@ class Formattor implements Formattor_Interface
 	 */
 	public function build( $content )
 	{
-    	   return $content;
+		$Parsedown = new \Parsedown();
+		return $Parsedown->text( $content );
 	}
 }

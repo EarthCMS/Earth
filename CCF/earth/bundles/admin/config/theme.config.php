@@ -75,5 +75,8 @@ return array(
 		
 		// jquery sortable
 		'jquery-sortable/jquery.mjs.nestedSortable.js' => 'vendor@lib',
+		
+		// jquery elastic 
+		'jquery.elastic.js' => 'vendor@lib',
 	)
 );

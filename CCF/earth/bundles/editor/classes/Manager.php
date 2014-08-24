@@ -34,7 +34,29 @@ class Manager
 			'editor' => 'Earth\\Editor\\Editor',
 			'formattor' => 'Earth\\Editor\\Formattor',
 		),
+		
+		// markdown editor
+		'markdown' => array(
+			'editor' => 'Earth\\Editor\\Editor',
+			'formattor' => 'Earth\\Editor\\Formattor_Markdown',
+		),
 	);
+	
+	/**
+	 * Set the current main editor
+	 *
+	 * @param string 		$editor
+	 * @return void
+	 */
+	public static function set_editor( $editor ) 
+	{
+		if ( !in_array( $editor, array_keys( static::$_editors ) ) )
+		{
+			throw new Exception( "Invalid or not registered editor '$editor'." );
+		}
+		
+		static::$_default = $editor;
+	}
 	
 	/**
 	 * Get a editor instance manager

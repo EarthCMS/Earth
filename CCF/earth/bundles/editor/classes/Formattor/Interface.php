@@ -10,5 +10,11 @@
  */
 interface Formattor_Interface 
 {
-	
+	/**
+	 * Build the content
+	 *
+	 * @param string 		$content
+	 * @return string
+	 */
+	public function build( $content );
 }

@@ -14,6 +14,8 @@ CREATE TABLE IF NOT EXISTS `earth_pages` (
   `image` varchar(255) NOT NULL,
   `controller` varchar(255) NOT NULL,
   `redirect` varchar(255) NOT NULL,
+  `content` text NOT NULL,
+  `content_build` text NOT NULL,
   `modules` text NOT NULL,
   `options` text NOT NULL,
   `created_at` int(11) NOT NULL,
@@ -25,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `earth_pages` (
   KEY `url` (`url`),
   KEY `full_url` (`full_url`),
   KEY `sequence` (`sequence`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 INSERT INTO `earth_pages` (`id`, `type`, `status`, `hidden`, `sequence`, `parent_id`, `url`, `full_url`, `name`, `description`, `image`, `controller`, `redirect`, `modules`, `options`, `created_at`, `modified_at`) VALUES (NULL, '1', '1', '0', '1', '0', '/', '/', 'Root', '', '', '', '', '', '', UNIX_TIMESTAMP(), UNIX_TIMESTAMP());
 
