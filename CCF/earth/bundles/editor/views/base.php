@@ -1,4 +1,6 @@
-<?php echo UI\Form::textarea( $key, $content ); ?>
+<?php echo UI\Form::textarea( $key, $content )
+	->add_class( 'earth-base-editor' ); 
+?>
 <?php if ( $modal ) : ?>
 	<script>
 		$( "#<?php echo UI\Form::form_id( 'textarea', $key ); ?>" ).elastic();

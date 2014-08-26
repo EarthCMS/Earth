@@ -62,6 +62,24 @@ Admin\Registry::add( 'pages', function( $module )
 
 /*
  *---------------------------------------------------------------
+ * Block Bundle
+ *---------------------------------------------------------------
+ * 
+ * Users administration bundle
+ */
+CCFinder::bundle( 'Earth\\Block', CCFPATH.'earth/bundles/block/' );
+
+// register the admin module
+Admin\Registry::add( 'block', function( $module ) 
+{
+	$module->title = __('Earth\\Block::controller/admin.topic');
+	$module->controller = 'Earth\\Block::Admin';
+	$module->icon = "el-icon-th";
+	//$module->sidebar = "Earth\\Pages::sidebar/pages.view";
+});
+
+/*
+ *---------------------------------------------------------------
  * Editor Bundle
  *---------------------------------------------------------------
  * 
