@@ -32,6 +32,7 @@ class Block extends \DB\Model
 	protected static $_defaults = array(
 		'id',
 		'key' => array( 'string', '' ),
+		'language' => '',
 		'content' => array( 'string', '' ),
 		'content_build' => array( 'string', '' ),
 		'footer' => array( 'string', '' ),
@@ -40,11 +41,66 @@ class Block extends \DB\Model
 	);
 	
 	/**
+	 * Render a block by key
+	 *
+	 * @param string 			$key
+	 * @param string 			$lang
+	 */
+	public static function render( $key, $lang = null )
+	{
+		if ( is_null( $lang ) )
+		{
+			$lang = \CCLang::current();
+		}
+		
+		$block = static::find( function( $q ) use( $key, $lang ) 
+		{
+			$q->limit(1);
+			$q->where( 'language', $lang );
+			$q->where( 'key', $key );
+		});
+		
+		if ( !$block )
+		{
+			"Block {$key} could not be found.";
+		}
+		
+		return $block->content();
+	}
+	
+	/**
 	 * Inital content for revisions
 	 *
 	 * @var array
 	 */
 	protected $_initial_content = array();
+	
+	/**
+	 * model constructor
+	 *
+	 * @param array 		$data
+	 * @return void
+	 */
+	public function __construct( $data = null ) 
+	{
+		// add the current language if not set
+		if ( !isset( $data['language'] ) )
+		{
+			$data['language'] = \CCLang::current();
+		}
+		
+		return parent::__construct( $data );
+	}
+	
+	/**
+	 * Returns the builded and formatted content
+	 *
+	 * @return string
+	 */
+	public function content()
+	{
+		return $this->content_build;
+	}
 	
 	/**
 	 * Has the block changed its contents?
@@ -73,6 +129,23 @@ class Block extends \DB\Model
 			'footer'		=> $data['footer'],
 			'key'		=> $data['key'],
 		);
+	}
+	
+	/**
+	 * Build content when its set
+	 *
+	 * @param string 			$content
+	 * @return void
+	 */
+	protected function _set_modifier_content( $content )
+	{
+		// rebuild content only if something has changed
+		if ( $this->content !== $content )
+		{
+			$this->content_build = \Earth\Editor\Content::build( $content );
+		}		
+		
+		return $content;
 	}
 	
 	/**
