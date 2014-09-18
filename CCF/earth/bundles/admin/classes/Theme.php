@@ -42,6 +42,9 @@ class Theme extends \Packtacular\Theme
 	 */
 	public function render( $file = null ) 
 	{
+		// set the orbit asset holder
+		\CCAsset::holder( 'admin.orbit' )->path = 'assets/vendor/';
+		
 		// assign the moduels
 		$this->admin_modules = Registry::modules();
 		
