@@ -125,6 +125,6 @@ class GroupController extends \Admin\Controller
 	 */
 	public function action_listsource()
 	{
-		return $this->admin_table()->response( null, array( 'group' ) );
+		return $this->admin_table()->response( null );
 	}
 }

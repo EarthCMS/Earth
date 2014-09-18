@@ -11,6 +11,20 @@
 class Router 
 {
 	/**
+	 * Handle the root request
+	 *
+	 * @return CCResponse
+	 */
+	public static function root()
+	{
+		$route = new \CCRoute;
+		$route->uri = '#root';
+		return \CCRequest::create( reset( \Earth\Pages\Router::resolve( array( $route ) ) ) )
+			->perform()
+			->response();
+	}
+	
+	/**
 	 * Resolve custom routes
 	 *
 	 * @param array[CCRoute] 		$route

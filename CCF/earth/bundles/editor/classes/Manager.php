@@ -59,6 +59,32 @@ class Manager
 	}
 	
 	/**
+	 * Register a new editor 
+	 *
+	 * @param string 		$name
+	 * @param string 		$editor			Editor class name
+	 * @param string 		$formattor		Formattor class name
+	 * @return void
+	 */
+	public static function register_editor( $name, $editor = null, $formattor = null ) 
+	{
+		if ( is_null( $formattor ) )
+		{
+			$formattor = 'Earth\\Editor\\Formattor';
+		}
+		
+		if ( is_null( $editor ) )
+		{
+			$editor = 'Earth\\Editor\\Editor';
+		}
+		
+		static::$_editors[$name] = array(
+			'editor' => $editor,
+			'formattor' => $formattor,
+		);
+	}
+	
+	/**
 	 * Get a editor instance manager
 	 *
 	 * @param string				$name

@@ -19,6 +19,8 @@ class ContentController extends \CCViewController
 		// In the page controller the theme topic is always the page name
 		$this->theme->topic = $page->name;
 		
+		echo \CCView::create('Allcare::h1.view', ['title' => $page->name]);
+		
 		echo $page->content();
 	}
 	

@@ -154,6 +154,26 @@ class Page extends \DB\Model
 	}
 	
 	/**
+	 * Returns a preview of the content
+	 *
+	 * @return string
+	 */
+	public function preview()
+	{
+		return strip_tags( $this->content );
+	}
+	
+	/**
+	 * Get a correct URL to the site
+	 *
+	 * @return string
+	 */
+	public function url()
+	{
+		return to( $this->full_url );
+	}
+	
+	/**
 	 * Recive subpages
 	 *
 	 * @return DB\Releation
@@ -181,7 +201,7 @@ class Page extends \DB\Model
 	 */
 	public function is_root()
 	{
-		return $this->url === '/';
+		return $this->full_url === '#root';
 	}
 	
 	/**
@@ -237,7 +257,14 @@ class Page extends \DB\Model
 		// updated full url
 		if ( !$this->is_root() )
 		{
-			$data['full_url'] = $this->full_url = trim( $this->parent->full_url.'/'.$data['url'], '/' );
+			if ( $this->parent->is_root() )
+			{
+				$data['full_url'] = $this->full_url = trim( $data['url'], '/' );
+			}
+			else
+			{
+				$data['full_url'] = $this->full_url = trim( $this->parent->full_url.'/'.$data['url'], '/' );
+			}
 		}
 		
 		return $data; 

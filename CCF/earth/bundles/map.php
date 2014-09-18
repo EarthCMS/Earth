@@ -51,6 +51,9 @@ CCFinder::bundle( 'Earth\\Pages', CCFPATH.'earth/bundles/pages/' );
 // register the earth router
 CCEvent::mind( 'ccf.router.resolve.after', array( '\\Earth\\Pages\\Router', 'resolve' ) );
 
+// overwrite the root page
+CCRouter::on( '#root', array( "\\Earth\\Pages\\Router", 'root' ) );
+
 // register the admin module
 Admin\Registry::add( 'pages', function( $module ) 
 {
@@ -75,7 +78,7 @@ Admin\Registry::add( 'block', function( $module )
 	$module->title = __('Earth\\Block::controller/admin.topic');
 	$module->controller = 'Earth\\Block::Admin';
 	$module->icon = "el-icon-th";
-	//$module->sidebar = "Earth\\Pages::sidebar/pages.view";
+	$module->sidebar = "Earth\\Block::admin/sidebar.view";
 });
 
 /*
@@ -99,3 +102,13 @@ Earth\Editor\Manager::set_editor( 'markdown' );
  * navigation tree.
  */
 Admin\Registry::prepare();
+
+/*
+ *---------------------------------------------------------------
+ * Earth wake event
+ *---------------------------------------------------------------
+ * 
+ * To let orbit ships and plugins do stuff after earth is 
+ * ready, we have to fire the earth.wake event.
+ */
+CCEvent::fire( 'earth.wake' );
