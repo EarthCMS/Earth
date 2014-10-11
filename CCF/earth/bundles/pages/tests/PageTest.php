@@ -24,7 +24,7 @@ class PageTest extends \DB\Test_Case
 		$page->type = 'content';
 		
 		$this->assertEquals( 'content', $page->type );
-		$this->assertEquals( 1, $page->raw( 'type' ) );
+		$this->assertEquals( 2, $page->raw( 'type' ) );
 		
 		$page->type = 'controller';
 		
